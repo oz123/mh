@@ -48,7 +48,7 @@ for line in sys.stdin:
     if match:
         target, help = match.groups()
         targets.update({target: help})
-    local_var = re.search(r'^(?P<target>[\w]+):.(?P<var>[A-Z_]+).*#\? (?P<help>.*)$$', line)
+    local_var = re.search(r'^(?P<target>[\w_\-/]+):.(?P<var>[A-Z_]+).*#\? (?P<help>.*)$$', line)
     if local_var:
         gd = local_var.groupdict()
         local_variables[gd['target']].append({'name': gd['var'], 'help': gd['help']})
@@ -81,9 +81,19 @@ OPTS ?= #? add extra OPTS to misc commands
 help:
 	@$(PY) -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-test: HOST ?= localhost #? what host is running NGinx
-test: COLOR ?= green #? which color should be the backround
-test: ## test that the HOST shows background COLOR
+bdbbb/color: HOST ?= localhost #? what host is running NGinx
+bbbbb/color: COLOR ?= green #? which color should be the backround
+bbbbb/color: ## test that the HOST shows background COLOR
+	curl -k -L $(HOST) | grep -qc "background: $(COLOR)"
+
+ffff-color: HOST ?= localhost #? what host is running NGinx
+ffff-color: COLOR ?= green #? which color should be the backround
+ffff-color: ## test that the HOST shows background COLOR
+	curl -k -L $(HOST) | grep -qc "background: $(COLOR)"
+
+test_color: HOST ?= localhost #? what host is running NGinx
+test_color: COLOR ?= green #? which color should be the backround
+test_color: ## test that the HOST shows background COLOR
 	curl -k -L $(HOST) | grep -qc "background: $(COLOR)"
 
 docker-build::  ## build a docker image
