@@ -1,9 +1,6 @@
 # help-make-helper
 
 A small python program you put in your Makefile to produce fancy help
-NOTE: in case you wonder, where the Python program is: it's inside the Makefile.
-This program is meant to run when you run the command `make`.
-## Motivation
 
 Building modern software requires a lot of tools. I can't and I don't want
 to memorize or type all these commands over and over again (docker, npm,
@@ -13,7 +10,29 @@ and the ``make`` command help you avoid unnecessary typing and save time.
 If you have a CI\CD pipeline this also help abstract all the stages and allows
 you to run all the test, build and deploy phases locally.
 
-Just type `make` after cloning this repo! It will print:
+Install this package in your path with:
+```
+$ pip install make-help-helper
+```
+
+Add PHONY target to your `Makefile` called `help` and set it to be the default:
+```
+.DEFAULT_GOAL := help
+
+.PHONY: help
+
+PY ?= python3
+
+help:
+	@$(PY) make-help-helper.py < $(MAKEFILE_LIST)
+
+```
+
+You can then document the `Makefile` targets with `##` after each target,
+or `#?` after a variable.
+
+For example the file `make` in this repo will print the following when no
+target is given or when `make help` is called:
 
 ```
 $ make
