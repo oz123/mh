@@ -33,16 +33,16 @@ local_variables = defaultdict(list)
 
 print("Targets:\n")
 for line in sys.stdin:
-    match = re.search(r'^([a-zA-Z_-]+):.*?## (.*)$$', line)
+    match = re.search(r'^([a-zA-Z_-]+):.*?## (.*)$', line)
     if match:
         target, help = match.groups()
         targets.update({target: help})
-    local_var = re.search(r'^(?P<target>[\w_\-/]+):.(?P<var>[A-Z_]+).*#\? (?P<help>.*)$$', line)
+    local_var = re.search(r'^(?P<target>[\w_\-/]+):.(?P<var>[A-Z_]+).*#\? (?P<help>.*)$', line)
     if local_var:
         gd = local_var.groupdict()
         local_variables[gd['target']].append({'name': gd['var'], 'help': gd['help']})
         continue
-    vars = re.search(r'([A-Z_]+).*#\? (.*)$$', line)
+    vars = re.search(r'([A-Z_]+).*#\? (.*)$', line)
     if vars:
         target, help = vars.groups()
         variables.append("%-20s %s" % (target, help))
