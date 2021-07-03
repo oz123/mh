@@ -1,4 +1,4 @@
 CFLAGS = -Wall -lpcre2-8
 
 all:
-	gcc $(CFLAGS) mh.c -o mh
+	gcc $(CFLAGS) queue.c mh.c -o mh
