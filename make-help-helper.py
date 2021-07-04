@@ -33,7 +33,7 @@ local_variables = defaultdict(list)
 
 print("Targets:\n")
 for line in sys.stdin:
-    match = re.search(r'^([a-zA-Z_\-\d]+):.*?## (.*)$', line)
+    match = re.search(r'^([a-zA-Z_\-\d\/]+):.*?## (.*)$', line)
     if match:
         target, help = match.groups()
         targets.update({target: help})

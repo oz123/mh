@@ -23,6 +23,9 @@ bbbbb/color: COLOR ?= green #? which color should be the backround
 bbbbb/color: ## test that the HOST shows background COLOR
 	curl -k -L $(HOST) | grep -qc "background: $(COLOR)"
 
+some/people/organize/their/targets/like/directories: ## you know just because you can
+	echo very long target name ay?
+
 color-0:  ## test target with number
 	echo target with 0
 
