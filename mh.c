@@ -12,7 +12,7 @@ main(int argc, char *argv[])
     char *target_help = "^([a-zA-Z_-]+):.*?## (.*)$$";
     char *line = NULL;
     size_t len = 0;
-    ssize_t nread;
+    size_t line_length;
 
     PCRE2_SPTR pattern = (PCRE2_SPTR)target_help;
     pcre2_code *re;
@@ -68,12 +68,37 @@ main(int argc, char *argv[])
    }
    
    pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(re, NULL);
-   while ((nread = getline(&line, &len, stdin)) != -1) {
-       printf("Retrieved line of length %zd:\n", nread);
-        fwrite(line, nread, 1, stdout);
+
+   while ((line_length = getline(&line, &len, stdin)) != -1) {
+       printf("Retrieved line of length %zd:\n", line_length);
+       // fwrite(line, nread, 1, stdout);
+       int rc = pcre2_match(
+           re,                   /* the compiled pattern */
+           (PCRE2_SPTR8)line,    /* the subject string */
+           line_length,          /* the length of the subject */
+           0,                    /* start at offset 0 in the subject */
+           0,                    /* default options */
+           match_data,           /* block for storing the result */
+           NULL);                /* use default match context */
+
+       if (rc < 0) {
+          switch(rc) {
+             case PCRE2_ERROR_NOMATCH: printf("No match\n"); break;
+             /* Handle other special cases if you like */
+             default: printf("Matching error %d\n", rc); break;
+       }
+
+       pcre2_match_data_free(match_data);   /* Release memory used for the match */
+       pcre2_code_free(re);                 /* data and the compiled pattern. */
+       }
+
     }
 
-    free(line);
+
+    free(a_target);
+    free(b_target);
+    free(c_target);
     queue_free(targets);
+    free(line);
     exit(EXIT_SUCCESS);
 }
