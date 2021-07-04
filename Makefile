@@ -23,6 +23,15 @@ bbbbb/color: COLOR ?= green #? which color should be the backround
 bbbbb/color: ## test that the HOST shows background COLOR
 	curl -k -L $(HOST) | grep -qc "background: $(COLOR)"
 
+color-0:  ## test target with number
+	echo target with 0
+
+h2o: ## water should match too
+	echo water
+
+color-1:  ## test target with number
+	echo target with number
+
 ffff-color: HOST ?= localhost #? what host is running NGinx
 ffff-color: COLOR ?= green #? which color should be the backround
 ffff-color: ## test that the HOST shows background COLOR
