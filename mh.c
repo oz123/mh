@@ -1,4 +1,3 @@
-#define _GNU_SOURCE
 #define PCRE2_CODE_UNIT_WIDTH 8
 #include <assert.h>
 #include <stdio.h>
@@ -7,10 +6,12 @@
 #include <pcre2.h>
 #include "queue.h"
 
+# define REGEX_HELP_TARGET "^([a-zA-Z_-]+):.*?## (.*)$"
+
 int
 main(int argc, char *argv[])
 {
-    char *target_help = "^([a-zA-Z_-]+):.*?## (.*)$$";
+    char *target_help = REGEX_HELP_TARGET;
     char *line = NULL;
     size_t len = 0;
     size_t line_length;
@@ -52,7 +53,7 @@ main(int argc, char *argv[])
    pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(re, NULL);
 
    while ((line_length = getline(&line, &len, stdin)) != -1) {
-       printf("Retrieved line of length %zd:\n", line_length);
+       // printf("Retrieved line of length %zd:\n", line_length);
        // fwrite(line, nread, 1, stdout);
        int rc = pcre2_match(
            re,                   /* the compiled pattern */
@@ -63,28 +64,42 @@ main(int argc, char *argv[])
            match_data,           /* block for storing the result */
            NULL);                /* use default match context */
 
-       if (rc < 0) {
-          switch(rc) {
-             case PCRE2_ERROR_NOMATCH: printf("No match\n"); break;
-             /* Handle other special cases if you like */
-             default: printf("Matching error %d\n", rc); break;
-             }
-       }
+       //if (rc < 0) {
+       //   switch(rc) {
+       //      case PCRE2_ERROR_NOMATCH: printf("No match\n"); break;
+       //      /* Handle other special cases if you like */
+       //      default: printf("Matching error %d\n", rc); break;
+       //      }
+       //}
 
-       printf("rc %d\n", rc);
+       //printf("rc %d\n", rc);
        ovector = pcre2_get_ovector_pointer(match_data);
-       printf("\nMatch succeeded at offset %d\n", (int)ovector[0]);
-       const char *match;
-       int rc2 = 0;
-       PCRE2_SPTR substring_start = 0;
-       size_t substring_length = 0;
+       //printf("\nMatch succeeded at offset %d\n", (int)ovector[0]);
+       //printf("sizeof ovector %d", pcre2_get_ovector_count(match_data));
+       //for (int i = 0; i < pcre2_get_ovector_count(match_data)*2; i++){
+       //   printf("\novector i %d\n", (int)ovector[i]);
+       //}
+
+       char * target_start;
+       size_t target_length = 0;
+       char * help_start;
+       size_t help_length = 0;
+
        target_t *a_target = (target_t *) malloc(sizeof(target_t));
-       for (int i = 0; i < rc; i++) {
-           substring_start = line + ovector[2*i];
-           substring_length = ovector[2*i+1] - ovector[2*i];
-           a_target->name = malloc(substring_length + 1);
-           strncpy(a_target->name, substring_start, substring_length);
-           a_target->name[substring_length] = '\0';
+       if (rc == 3) {
+
+           target_start = line + ovector[2];
+           target_length = ovector[3] - ovector[2];
+           a_target->name = malloc(target_length + 1);
+           strncpy(a_target->name, target_start, target_length);
+           a_target->name[target_length] = '\0';
+
+           help_start = line + ovector[4];
+           help_length = ovector[5] - ovector[4];
+           a_target->help = malloc(help_length + 1);
+           strncpy(a_target->help, help_start, help_length);
+           a_target->help[help_length] = '\0';
+
            queue_push_tail(targets, a_target);
        }
     }
