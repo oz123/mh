@@ -6,7 +6,7 @@
 #include <pcre2.h>
 #include "queue.h"
 
-# define REGEX_HELP_TARGET "^([a-zA-Z_-]+):.*?## (.*)$"
+# define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_-]+):.*?## (?P<help>.*)$"
 
 int
 main(int argc, char *argv[])
@@ -51,7 +51,7 @@ main(int argc, char *argv[])
    }
    
    pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(re, NULL);
-
+   
    while ((line_length = getline(&line, &len, stdin)) != -1) {
        // printf("Retrieved line of length %zd:\n", line_length);
        // fwrite(line, nread, 1, stdout);
@@ -79,7 +79,15 @@ main(int argc, char *argv[])
        //for (int i = 0; i < pcre2_get_ovector_count(match_data)*2; i++){
        //   printf("\novector i %d\n", (int)ovector[i]);
        //}
+       //
+       PCRE2_UCHAR *substr_buf = NULL;
+       PCRE2_SIZE substr_buf_len = 0;
+       
+       int copybyname_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"name", &substr_buf, &substr_buf_len);
 
+       if (copybyname_rc == 0) {
+           printf("meh is: %d %s %d\n", copybyname_rc, substr_buf, (int)substr_buf_len);
+       }
        char * target_start;
        size_t target_length = 0;
        char * help_start;
