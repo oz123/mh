@@ -4,9 +4,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pcre2.h>
-#include "queue.h"
+#include "mc.h"
 
 # define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_-]+):.*?## (?P<help>.*)$"
+
+target_t* check_line_for_target(char *line) {
+
+    printf("Retrieved line %s:\n", line);
+    target_t *a_target = (target_t *) malloc(sizeof(target_t));
+    a_target->name = "Yousef";
+    return a_target;
+}
 
 int
 main(int argc, char *argv[])
@@ -27,11 +35,6 @@ main(int argc, char *argv[])
     Queue* targets = queue_new();
     Queue* globals = queue_new();
 
-    typedef struct target {
-      char *name;
-      char *help;
-      Queue *locals;
-    } target_t;
     
     re = pcre2_compile(
                     pattern,
@@ -53,8 +56,8 @@ main(int argc, char *argv[])
    pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(re, NULL);
    
    while ((line_length = getline(&line, &len, stdin)) != -1) {
-       // printf("Retrieved line of length %zd:\n", line_length);
-       // fwrite(line, nread, 1, stdout);
+       target_t *b_target = check_line_for_target(line);
+       printf("Retrieved target: %s\n", b_target->name);
        int rc = pcre2_match(
            re,                   /* the compiled pattern */
            (PCRE2_SPTR8)line,    /* the subject string */
@@ -72,14 +75,8 @@ main(int argc, char *argv[])
        //      }
        //}
 
-       //printf("rc %d\n", rc);
        ovector = pcre2_get_ovector_pointer(match_data);
-       //printf("\nMatch succeeded at offset %d\n", (int)ovector[0]);
-       //printf("sizeof ovector %d", pcre2_get_ovector_count(match_data));
-       //for (int i = 0; i < pcre2_get_ovector_count(match_data)*2; i++){
-       //   printf("\novector i %d\n", (int)ovector[i]);
-       //}
-       //
+
        PCRE2_UCHAR *substr_buf = NULL;
        PCRE2_SIZE substr_buf_len = 0;
        
