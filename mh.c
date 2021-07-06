@@ -16,6 +16,22 @@ target_t* check_line_for_target(char *line) {
     return a_target;
 }
 
+/* pseudo code:
+ *
+target = NULL;
+for line in lines:
+    if match_global(line, global_var):
+       push_global_var(globals, global_var)
+       global_var = NULL;
+       continue
+    if match_local(line, local_var):
+       push_local_to_target(local_var, target)
+       local_var = NULL;
+       continue
+    if match_target(line, target)
+       push_target(target, targets)
+       target = NULL;
+*/
 int
 main(int argc, char *argv[])
 {
