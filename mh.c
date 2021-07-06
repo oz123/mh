@@ -6,9 +6,8 @@
 #include <pcre2.h>
 #include "mc.h"
 
-# define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_-]+):.*?## (?P<help>.*)$"
 
-target_t* check_line_for_target(char *line) {
+int check_line_for_target(char *line, variable_t *target) {
 
     printf("Retrieved line %s:\n", line);
     target_t *a_target = (target_t *) malloc(sizeof(target_t));
