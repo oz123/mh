@@ -1,4 +1,6 @@
 #include "queue.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 # define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_-]+):.*?## (?P<help>.*)$"
 # define REGEX_LOCAL_VAR "^(?P<target>[\w_\-/]+):.(?P<var>[A-Z_]+).*#\? (?P<help>.*)$"
@@ -22,6 +24,15 @@ typedef struct variable {
   char *help;
 } variable_t;
 
+
+variable_t *new_variable(void) {
+    variable_t *variable = (variable_t *) malloc(sizeof(variable_t));
+    variable->name = NULL;
+    variable->default_value = NULL;
+    variable->help = NULL;
+    return variable;
+}
+
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
  * <target-name>: <var-name> ?= <default value> #? <help string>
@@ -31,7 +42,7 @@ int check_line_for_global_var(char *line, variable_t *global);
 
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
- * <target-name>: <var-name> ?= <default value> #? <help string>
+ * <target-name>: <var-name> ?= <default value> #? <help string>
  */
 int check_line_for_local_var(char *line, variable_t *local);
 
