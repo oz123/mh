@@ -8,7 +8,16 @@
 #include "mc.h"
 
 
+int check_line_for_global_var(char *line, variable_t *variable) {
+    return 1;
+}
+
+int check_line_for_local_var(char *line, variable_t *variable) {
+    return 1;
+}
+
 int check_line_for_target(char *line, target_t *target) {
+
     int errornumber;
     char *target_help = REGEX_HELP_TARGET;
     PCRE2_SIZE erroroffset;
@@ -44,7 +53,9 @@ int check_line_for_target(char *line, target_t *target) {
 
      if (rc < 0) {
          switch(rc) {
-             case PCRE2_ERROR_NOMATCH: printf("No match\n"); return 1;
+             case PCRE2_ERROR_NOMATCH:
+                 printf("No match\n");
+		 return 1;
              }
      }
 
@@ -96,19 +107,29 @@ main(int argc, char *argv[])
     Queue* targets = queue_new();
     Queue* globals = queue_new();
 
-    target_t *c_target = (target_t *) malloc(sizeof(target_t));
+    target_t *target = (target_t *) malloc(sizeof(target_t));
 
     while ((line_length = getline(&line, &len, stdin)) != -1) {
-        if (check_line_for_target(line, c_target) == 0) {
-            printf("Retrieved target: %s %s\n", c_target->name, c_target->help);
-            queue_push_tail(targets, c_target);
-            c_target->name= NULL;
-            c_target->help= NULL;
+        variable_t *variable = new_variable();
+        if (check_line_for_global_var(line, variable) == 0) {
+            queue_push_tail(globals, variable);
+            continue;
+        }
+        target = (target_t *) malloc(sizeof(target_t));
+	if (check_line_for_local_var(line, variable) == 0) {
+	    queue_push_tail(target->locals, variable);
+            continue;
+	}
+        if (check_line_for_target(line, target) == 0) {
+            printf("Retrieved target: %s %s\n", target->name, target->help);
+            queue_push_tail(targets, target);
        }
+       /* target or variable were not pushed to queue, hence they can be released */
+       free(variable);
     }
 
     queue_free(targets);
-    free(c_target);
+    queue_free(globals);
     free(line);
     exit(EXIT_SUCCESS);
 }
