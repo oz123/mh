@@ -81,22 +81,6 @@ int check_line_for_target(char *line, target_t *target) {
      return 0;
 }
 
-/* pseudo code:
- *
-target = NULL;
-for line in lines:
-    if match_global(line, global_var):
-       push_global_var(globals, global_var)
-       global_var = NULL;
-       continue
-    if match_local(line, local_var):
-       push_local_to_target(local_var, target)
-       local_var = NULL;
-       continue
-    if match_target(line, target)
-       push_target(target, targets)
-       target = NULL;
-*/
 int
 main(int argc, char *argv[])
 {
@@ -131,7 +115,6 @@ main(int argc, char *argv[])
         /* target or variable were not pushed to queue, hence they can be released */
         free_variable(variable);
     }
-
 
     while (!queue_is_empty(targets)) {
         target = queue_pop_head(targets);
