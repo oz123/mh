@@ -5,9 +5,9 @@
 #include <string.h>
 #include <pcre2.h>
 
-# define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_-]+):.*?## (?P<help>.*)$"
-# define REGEX_LOCAL_VAR "^(?P<name>[\w_\-/]+):.(?P<var>[A-Z_]+).*#\? (?P<help>.*)$"
-# define REGEX_GLOBAL_VAR "(?P<name>[A-Z_]+).*#\? (?P<help>.*)$"
+# define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_/-]+):.*?## (?P<help>.*)$"
+# define REGEX_LOCAL_VAR "^(?P<name>[a-zA-Z_/-]+):.(?P<var>[A-Z_]+).*#? (?P<help>.*)$"
+# define REGEX_GLOBAL_VAR "(?P<name>[A-Z_]+).*#? (?P<help>.*)$"
 
 int string_length(char *s) {
   if (*s == '\0') // Base condition
@@ -72,6 +72,16 @@ void free_variable(variable_t *variable){
     free(variable->default_value);
     free(variable->help);
 }
+
+/**
+ * check line for regex
+ * line - a text line
+ * target - a target pointer
+ * variable - a variable pointer
+ * local - check if matching for local target
+ **/
+int check_line_for_regex(char *line, target_t *target, variable_t *variable, char *regex, int local);
+
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
  * <target-name>: <var-name> ?= <default value> #? <help string>
