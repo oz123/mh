@@ -16,7 +16,6 @@ int string_length(char *s) {
   return (1 + string_length(++s));
 }
 
-
 /**
  * Targets have names, help text and local variables
  */
@@ -80,22 +79,24 @@ void free_variable(variable_t *variable){
  * variable - a variable pointer
  * local - check if matching for local target
  **/
-int check_line_for_regex(char *line, target_t *target, variable_t *variable, char *regex, int local);
+int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcre2_code *regex, int local);
 
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
  * <target-name>: <var-name> ?= <default value> #? <help string>
  * <var-name> ?= <default value>#? <help string>
  */
-int check_line_for_global_var(char *line, variable_t *global);
+int check_line_for_global_var(char *line, variable_t *global, pcre2_code *regex);
 
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
  * <target-name>: <var-name> ?= <default value> #? <help string>
  */
-int check_line_for_local_var(char *line, variable_t *local);
+int check_line_for_local_var(char *line, variable_t *local, pcre2_code *regex);
 
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
  */
-int check_line_for_target(char *line, target_t *target);
+int check_line_for_target(char *line, target_t *target, pcre2_code *regex);
+
+void init_regex_matchers(pcre2_code **reg_target, pcre2_code **reg_global, pcre2_code **reg_local);
