@@ -7,45 +7,24 @@
 #include <pcre2.h>
 #include "mc.h"
 
-
-int check_line_for_global_var(char *line, variable_t *variable) {
-    return check_line_for_regex(line, NULL, variable, REGEX_GLOBAL_VAR, 0);
+int check_line_for_global_var(char *line, variable_t *variable, pcre2_code *regex) {
+    return check_line_for_regex(line, NULL, variable, regex, 0);
 }
 
-int check_line_for_local_var(char *line, variable_t *variable) {
-    return check_line_for_regex(line, NULL, variable, REGEX_LOCAL_VAR, 0);
+int check_line_for_local_var(char *line, variable_t *variable, pcre2_code *regex) {
+    return check_line_for_regex(line, NULL, variable, regex, 0);
 }
 
-int check_line_for_target(char *line, target_t *target) {
-    return check_line_for_regex(line, target, NULL, REGEX_HELP_TARGET, 0);
+int check_line_for_target(char *line, target_t *target, pcre2_code *regex) {
+    return check_line_for_regex(line, target, NULL, regex, 0);
 }
 
-int check_line_for_regex(char *line, target_t *target, variable_t *variable, char *regex, int local) {
-    int errornumber;
-    PCRE2_SIZE erroroffset;
-    PCRE2_SPTR pattern = (PCRE2_SPTR)regex;
-    pcre2_code *re;
+int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcre2_code *regex, int local) {
 
-    re = pcre2_compile(
-                       pattern,
-                       PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
-                       0,                     /* default options */
-                       &errornumber,          /* for error number */
-                       &erroroffset,          /* for error offset */
-                       NULL);                 /* use default compile context */
-
-    /* Compilation failed: print the error message and exit. */
-    if (re == NULL) {
-        PCRE2_UCHAR buffer[256];
-        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
-        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
-        return 1;
-    }
-
-    pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(re, NULL);
+    pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(regex, NULL);
 
     int rc = pcre2_match(
-        re,                   /* the compiled pattern */
+        regex,                   /* the compiled pattern */
         (PCRE2_SPTR8)line,    /* the subject string */
         strlen(line),          /* the length of the subject */
         0,                    /* start at offset 0 in the subject */
@@ -56,14 +35,6 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, cha
      if (rc < 0) {
          return 1;
      }
-
-     /*if (rc < 0) {
-         switch(rc) {
-             case PCRE2_ERROR_NOMATCH:
-                 printf("No match\n");
-		 return 1;
-             }
-     }*/
 
      PCRE2_UCHAR *substr_buf = NULL;
      PCRE2_SIZE substr_buf_len = 0;
@@ -91,7 +62,6 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, cha
      }
 
      pcre2_match_data_free(match_data);   /* Release memory used for the match */
-     pcre2_code_free(re);                 /* data and the compiled pattern. */
      return 0;
 
 }
@@ -108,21 +78,73 @@ main(int argc, char *argv[])
 
     target_t *target = new_target();
 
+    int errornumber;
+    PCRE2_SIZE erroroffset;
+    pcre2_code *regex_target, *regex_local, *regex_global;
+
+    regex_target = pcre2_compile(
+                       (PCRE2_SPTR)REGEX_HELP_TARGET,
+                       PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
+                       0,                     /* default options */
+                       &errornumber,          /* for error number */
+                       &erroroffset,          /* for error offset */
+                       NULL);                 /* use default compile context */
+
+    /* Compilation failed: print the error message and exit. */
+    if (regex_target == NULL) {
+        PCRE2_UCHAR buffer[256];
+        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
+        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
+        return 1;
+    }
+
+    regex_global = pcre2_compile(
+                       (PCRE2_SPTR)REGEX_GLOBAL_VAR,
+                       PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
+                       0,                     /* default options */
+                       &errornumber,          /* for error number */
+                       &erroroffset,          /* for error offset */
+                       NULL);                 /* use default compile context */
+
+    /* Compilation failed: print the error message and exit. */
+    if (regex_global == NULL) {
+        PCRE2_UCHAR buffer[256];
+        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
+        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
+        return 1;
+    }
+
+    regex_local = pcre2_compile(
+                       (PCRE2_SPTR)REGEX_LOCAL_VAR,
+                       PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
+                       0,                     /* default options */
+                       &errornumber,          /* for error number */
+                       &erroroffset,          /* for error offset */
+                       NULL);                 /* use default compile context */
+
+    /* Compilation failed: print the error message and exit. */
+    if (regex_local == NULL) {
+        PCRE2_UCHAR buffer[256];
+        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
+        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
+        return 1;
+    }
+
     while ((line_length = getline(&line, &len, stdin)) != -1) {
         variable_t *variable = new_variable();
-        if (check_line_for_global_var(line, variable) == 0) {
+        if (check_line_for_global_var(line, variable, regex_global) == 0) {
             queue_push_tail(globals, variable);
             continue;
         }
 
-	    if (check_line_for_local_var(line, variable) == 0) {
+	    if (check_line_for_local_var(line, variable, regex_local) == 0) {
 	        queue_push_tail(target->locals, variable);
             if (queue_is_empty(target->locals) != 0) {
                 queue_push_tail(target->locals, variable);
             }
             continue;
 	    }
-        if (check_line_for_target(line, target) == 0) {
+        if (check_line_for_target(line, target, regex_target) == 0) {
             printf("Retrieved target: %s %s\n", target->name, target->help);
             target_t *copy = copy_target(target);
             queue_push_tail(targets, copy);
@@ -142,6 +164,9 @@ main(int argc, char *argv[])
         printf("I have var %p %s %s\n", gv, gv->name, gv->help);
     }
 
+    pcre2_code_free(regex_target);
+    pcre2_code_free(regex_local);
+    pcre2_code_free(regex_global);
     queue_free(targets);
     queue_free(globals);
     free(line);
