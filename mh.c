@@ -9,7 +9,67 @@
 
 
 int check_line_for_global_var(char *line, variable_t *variable) {
-    return 1;
+    int errornumber;
+    char *target_help = REGEX_GLOBAL_VAR;
+    PCRE2_SIZE erroroffset;
+    PCRE2_SPTR pattern = (PCRE2_SPTR)target_help;
+    pcre2_code *re;
+
+    re = pcre2_compile(
+                       pattern,
+                       PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
+                       0,                     /* default options */
+                       &errornumber,          /* for error number */
+                       &erroroffset,          /* for error offset */
+                       NULL);                 /* use default compile context */
+
+    /* Compilation failed: print the error message and exit. */
+    if (re == NULL) {
+        PCRE2_UCHAR buffer[256];
+        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
+        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
+        return 1;
+    }
+
+    pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(re, NULL);
+
+    int rc = pcre2_match(
+        re,                   /* the compiled pattern */
+        (PCRE2_SPTR8)line,    /* the subject string */
+        strlen(line),          /* the length of the subject */
+        0,                    /* start at offset 0 in the subject */
+        0,                    /* default options */
+        match_data,           /* block for storing the result */
+        NULL);                /* use default match context */
+
+     if (rc < 0) {
+         switch(rc) {
+             case PCRE2_ERROR_NOMATCH:
+                 printf("No match\n");
+		 return 1;
+             }
+     }
+
+
+     PCRE2_UCHAR *substr_buf = NULL;
+     PCRE2_SIZE substr_buf_len = 0;
+
+     int copyname_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"global", &substr_buf, &substr_buf_len);
+     if (copyname_rc == 0) {
+         variable->name = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
+         memcpy(variable->name, substr_buf, substr_buf_len);
+     }
+
+
+     int copyhelp_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"help", &substr_buf, &substr_buf_len);
+     if (copyhelp_rc == 0) {
+         variable->help = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
+         memcpy(variable->help, substr_buf, substr_buf_len);
+     }
+
+     pcre2_match_data_free(match_data);   /* Release memory used for the match */
+     pcre2_code_free(re);                 /* data and the compiled pattern. */
+     return 0;
 }
 
 int check_line_for_local_var(char *line, variable_t *variable) {
@@ -54,7 +114,7 @@ int check_line_for_target(char *line, target_t *target) {
      if (rc < 0) {
          switch(rc) {
              case PCRE2_ERROR_NOMATCH:
-                 printf("No match\n");
+                 printf("GV: No match\n");
 		 return 1;
              }
      }
@@ -119,6 +179,12 @@ main(int argc, char *argv[])
     while (!queue_is_empty(targets)) {
         target = queue_pop_head(targets);
         printf("I have target %p %s %s\n", target, target->name, target->help);
+    }
+ 
+    variable_t *gv = new_variable();
+    while (!queue_is_empty(globals)) {
+        gv = queue_pop_head(globals);
+        printf("I have var %p %s %s\n", gv, gv->name, gv->help);
     }
 
     queue_free(targets);
