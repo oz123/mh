@@ -54,7 +54,7 @@ int check_line_for_global_var(char *line, variable_t *variable) {
      PCRE2_UCHAR *substr_buf = NULL;
      PCRE2_SIZE substr_buf_len = 0;
 
-     int copyname_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"global", &substr_buf, &substr_buf_len);
+     int copyname_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"name", &substr_buf, &substr_buf_len);
      if (copyname_rc == 0) {
          variable->name = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
          memcpy(variable->name, substr_buf, substr_buf_len);
