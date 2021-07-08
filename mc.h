@@ -99,4 +99,4 @@ int check_line_for_local_var(char *line, variable_t *local, pcre2_code *regex);
  */
 int check_line_for_target(char *line, target_t *target, pcre2_code *regex);
 
-void init_regex_matchers(pcre2_code **reg_target, pcre2_code **reg_global, pcre2_code **reg_local);
+pcre2_code *compile_regex(char *regex);

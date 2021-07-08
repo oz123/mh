@@ -63,7 +63,30 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
 
      pcre2_match_data_free(match_data);   /* Release memory used for the match */
      return 0;
+}
 
+pcre2_code *compile_regex(char *regex){
+
+    int errornumber;
+    PCRE2_SIZE erroroffset;
+    pcre2_code *reg;
+
+    reg = pcre2_compile((PCRE2_SPTR)regex,
+                        PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
+                        0,                     /* default options */
+                        &errornumber,          /* for error number */
+                        &erroroffset,          /* for error offset */
+                        NULL);                 /* use default compile context */
+
+    /* Compilation failed: print the error message and exit. */
+    if (reg == NULL) {
+        PCRE2_UCHAR buffer[256];
+        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
+        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
+        exit(1);
+    }
+
+    return reg;
 }
 
 int
@@ -78,57 +101,11 @@ main(int argc, char *argv[])
 
     target_t *target = new_target();
 
-    int errornumber;
-    PCRE2_SIZE erroroffset;
     pcre2_code *regex_target, *regex_local, *regex_global;
 
-    regex_target = pcre2_compile(
-                       (PCRE2_SPTR)REGEX_HELP_TARGET,
-                       PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
-                       0,                     /* default options */
-                       &errornumber,          /* for error number */
-                       &erroroffset,          /* for error offset */
-                       NULL);                 /* use default compile context */
-
-    /* Compilation failed: print the error message and exit. */
-    if (regex_target == NULL) {
-        PCRE2_UCHAR buffer[256];
-        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
-        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
-        return 1;
-    }
-
-    regex_global = pcre2_compile(
-                       (PCRE2_SPTR)REGEX_GLOBAL_VAR,
-                       PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
-                       0,                     /* default options */
-                       &errornumber,          /* for error number */
-                       &erroroffset,          /* for error offset */
-                       NULL);                 /* use default compile context */
-
-    /* Compilation failed: print the error message and exit. */
-    if (regex_global == NULL) {
-        PCRE2_UCHAR buffer[256];
-        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
-        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
-        return 1;
-    }
-
-    regex_local = pcre2_compile(
-                       (PCRE2_SPTR)REGEX_LOCAL_VAR,
-                       PCRE2_ZERO_TERMINATED, /* indicates pattern is zero-terminated */
-                       0,                     /* default options */
-                       &errornumber,          /* for error number */
-                       &erroroffset,          /* for error offset */
-                       NULL);                 /* use default compile context */
-
-    /* Compilation failed: print the error message and exit. */
-    if (regex_local == NULL) {
-        PCRE2_UCHAR buffer[256];
-        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
-        printf("PCRE2 compilation failed at offset %d: %s\n", (int)erroroffset, buffer);
-        return 1;
-    }
+    regex_target = compile_regex(REGEX_HELP_TARGET);
+    regex_global = compile_regex(REGEX_GLOBAL_VAR);
+    regex_local = compile_regex(REGEX_LOCAL_VAR);
 
     while ((line_length = getline(&line, &len, stdin)) != -1) {
         variable_t *variable = new_variable();
@@ -167,6 +144,7 @@ main(int argc, char *argv[])
     pcre2_code_free(regex_target);
     pcre2_code_free(regex_local);
     pcre2_code_free(regex_global);
+    free_target(target);
     queue_free(targets);
     queue_free(globals);
     free(line);
