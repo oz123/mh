@@ -107,7 +107,7 @@ main(int argc, char *argv[])
     Queue* targets = queue_new();
     Queue* globals = queue_new();
 
-    target_t *target = (target_t *) malloc(sizeof(target_t));
+    target_t *target = new_target();
 
     while ((line_length = getline(&line, &len, stdin)) != -1) {
         variable_t *variable = new_variable();
@@ -115,17 +115,27 @@ main(int argc, char *argv[])
             queue_push_tail(globals, variable);
             continue;
         }
-        target = (target_t *) malloc(sizeof(target_t));
-	if (check_line_for_local_var(line, variable) == 0) {
-	    queue_push_tail(target->locals, variable);
+
+	    if (check_line_for_local_var(line, variable) == 0) {
+	        queue_push_tail(target->locals, variable);
+            if (queue_is_empty(target->locals) != 0) {
+                queue_push_tail(target->locals, variable);
+            }
             continue;
-	}
+	    }
         if (check_line_for_target(line, target) == 0) {
             printf("Retrieved target: %s %s\n", target->name, target->help);
-            queue_push_tail(targets, target);
-       }
-       /* target or variable were not pushed to queue, hence they can be released */
-       free(variable);
+            target_t *copy = copy_target(target);
+            queue_push_tail(targets, copy);
+        }
+        /* target or variable were not pushed to queue, hence they can be released */
+        free_variable(variable);
+    }
+
+
+    while (!queue_is_empty(targets)) {
+        target = queue_pop_head(targets);
+        printf("I have target %p %s %s\n", target, target->name, target->help);
     }
 
     queue_free(targets);
@@ -133,4 +143,3 @@ main(int argc, char *argv[])
     free(line);
     exit(EXIT_SUCCESS);
 }
-/* vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab */
