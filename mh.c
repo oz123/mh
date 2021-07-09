@@ -133,9 +133,14 @@ main(int argc, char *argv[])
         free_variable(variable);
     }
 
+    variable_t *lv = new_variable();
     while (!queue_is_empty(targets)) {
         target = queue_pop_head(targets);
         printf("I have target %p %s %s\n", target, target->name, target->help);
+        while (!queue_is_empty(target->locals)) {
+            lv = queue_pop_head(target->locals);
+            printf("I have local var %p %s %s\n", lv, lv->name, lv->help);
+        }
     }
  
     variable_t *gv = new_variable();
