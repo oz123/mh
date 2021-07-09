@@ -109,8 +109,6 @@ main(int argc, char *argv[])
 
     pcre2_code *regex_target, *regex_local, *regex_global;
     init_pcre_regex(&regex_target, &regex_global, &regex_local);
-    regex_global = compile_regex(REGEX_GLOBAL_VAR);
-    regex_local = compile_regex(REGEX_LOCAL_VAR);
 
     while ((line_length = getline(&line, &len, stdin)) != -1) {
         variable_t *variable = new_variable();
