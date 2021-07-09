@@ -10,9 +10,9 @@ PY ?= python3
 
 VERSION ?= $(shell git describe --always)#? version
 REGISTRY ?=docker.io#? container registry to push
-ORG ?= oz123#? organization to push to
 IMG ?= $(shell basename $(CURDIR))#? image name
 OPTS ?=#? add extra OPTS to misc commands
+ORG ?= oz123#? organization to push
 
 
 help:
