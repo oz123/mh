@@ -4,9 +4,6 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-.PHONY: test
-
-PY ?= python3
 
 VERSION ?= $(shell git describe --always)#? version
 REGISTRY ?=docker.io#? container registry to push
@@ -16,7 +13,7 @@ ORG ?= oz123#? organization to push
 
 
 help:
-	@$(PY) make-help-helper.py < $(MAKEFILE_LIST)
+	@mh < $(MAKEFILE_LIST)
 
 bdbbb/color: HOST ?= localhost #? what host is running NGinx
 bbbbb/color: COLOR ?= green #? which color should be the backround
@@ -51,3 +48,18 @@ docker-build::  ## build a docker image
 docker-push::  ## push docker image to $(REGISTRY)
 	echo docker push $(REGISTRY)/$(ORG)/$(IMG):v$(VERSION)
 
+DEBUG = -g -fsanitize=address
+CFLAGS = -Wall -lpcre2-8 #$(DEBUG)
+OPTS = -D COLOROUTPUT
+PREFIX = /usr/local
+BINDIR = /bin
+PROGNAME = mh
+
+mh:  ## compile this software
+	gcc $(CFLAGS) queue.c mh.c $(OPTS) -o $(PROGNAME)
+
+install:  ## install this software
+	install -m 755 mh $(PREFIX)$(BINDIR)/$(PROGNAME)
+
+unistall:
+	rm -iv $(PREFIX)$(BINDIR)/$(PROGNAME)
