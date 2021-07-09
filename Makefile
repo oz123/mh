@@ -13,7 +13,7 @@ ORG ?= oz123#? organization to push
 
 
 help:
-	@mh < $(MAKEFILE_LIST)
+	@mh <$(MAKEFILE_LIST)
 
 bdbbb/color: HOST ?= localhost #? what host is running NGinx
 bbbbb/color: COLOR ?= green #? which color should be the backround
@@ -55,7 +55,7 @@ PREFIX = /usr/local
 BINDIR = /bin
 PROGNAME = mh
 
-mh:  ## compile this software
+mh::  ## compile this software
 	gcc $(CFLAGS) queue.c mh.c $(OPTS) -o $(PROGNAME)
 
 install:  mh ## install this software
