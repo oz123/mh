@@ -132,7 +132,6 @@ main(int argc, char *argv[])
             continue;
 	    }
         if (check_line_for_target(line, target, regex_target) == 0) {
-            printf("Retrieved target: %s %s\n", target->name, target->help);
             target_t *copy = copy_target(target);
             queue_push_tail(targets, copy);
         }
@@ -143,19 +142,35 @@ main(int argc, char *argv[])
     variable_t *lv = new_variable();
     while (!queue_is_empty(targets)) {
         target = queue_pop_head(targets);
-        printf("I have target %p %s %s\n", target, target->name, target->help);
+        printf("\n%s\t\t%s\n", target->name, target->help);
+        if (!queue_is_empty(target->locals)) {
+			printf("\n\tOptions:\n\n");
+		}
         while (!queue_is_empty(target->locals)) {
             lv = queue_pop_head(target->locals);
-            printf("I have local var %p %s %s (default: %s)\n", lv, lv->name, lv->help, lv->default_value);
+            printf("\t%s: %s (default: %s)\n", lv->name, lv->help, lv->default_value);
         }
     }
  
-    variable_t *gv = new_variable();
-    while (!queue_is_empty(globals)) {
-        gv = queue_pop_head(globals);
-        printf("I have global %p %s %s (default: %s)\n", gv, gv->name, gv->help, gv->default_value);
-    }
+	if (!queue_is_empty(globals)) {
+   		variable_t *gv = new_variable();
+    	printf("\nGlobal options you can override:\n\n");
+    	while (!queue_is_empty(globals)) {
+        	gv = queue_pop_head(globals);
+			if (gv->default_value != NULL) {
 
+			}
+        	printf("%s:\t%s", gv->name, gv->help);
+			if (string_length(gv->default_value) != 0) {
+				printf(" (default: %s)\n", gv->default_value);
+			} else {
+				printf("\n");
+			}
+    	}
+		free_variable(gv);
+	}
+
+	free_variable(lv);
     pcre2_code_free(regex_target);
     pcre2_code_free(regex_local);
     pcre2_code_free(regex_global);
