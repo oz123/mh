@@ -123,7 +123,7 @@ int check_line_for_local_var(char *line, variable_t *local, pcre2_code *regex);
  *
  * @param line      a text line
  * @target          target_t a target pointer
- * @regex           pcre2_code pointer 
+ * @regex           pcre2_code pointer
  * @return          0 for a match, 1 for non match
  */
 int check_line_for_target(char *line, target_t *target, pcre2_code *regex);

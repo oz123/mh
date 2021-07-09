@@ -1,14 +1,40 @@
 # mh
 
+## make help
+
 A small program you put in your Makefile to produce fancy help
 
 Building modern software requires a lot of tools. I can't and I don't want
 to memorize or type all these commands over and over again (docker, npm,
 terraform, ansible, scss, etc). What ever your stack looks like, ``Makefile``
 and the ``make`` command help you avoid unnecessary typing and save time.
+All too often, I forget which targets are available in the `Makefile`s of
+different project. Also, as time goes on, these Makefiles can become gigantic,
+and getting a quick overview by reading the `Makefile` becomes impossible.
+The purpose of this program is to fix this situatuion by turning a `Makefile`
+to self-documenting, by using a simple syntax for documenting target, variable
+and global make option.
+This is much better than maintaining a help target manually for larger projects.
+This program parses all the lines and checks for target, local variables
+and global variables. If they are suffixed with `##` or `#?` the string that
+follows is interpreted as the help for that variable or target.
 
-If you have a CI\CD pipeline this also help abstract all the stages and allows
-you to run all the test, build and deploy phases locally.
+The targets can be used with parameters like this:
+
+```
+make docker-build IMG=foo TAG=0.1
+```
+
+Or:
+
+```
+make test COLOR=red HOST=red.example.org
+```
+
+(As a side note: If you have a CI\CD pipeline a `Makefile` helps abstracting all
+the stages and allows you to run all the tests, build and deploy phases locally).
+
+## Installation
 
 Install this package in your path with:
 ```
@@ -17,6 +43,8 @@ $ cd mh
 $ make mh
 $ sudo make install
 ```
+
+## Usage
 
 Add PHONY target to your `Makefile` called `help` and set it to be the default:
 ```
@@ -30,10 +58,21 @@ help:
 ```
 
 You can then document the `Makefile` targets with `##` after each target,
-or `#?` after a variable.
+or `#?` after a variable
+*Note*: the help text for for local variables should not have be prefixed
+with spaces before `#?`.
+Here is how you document targes and varibles:
 
-For example the `Makefile` in this repo will print the following when no
-target is given or when `make help` is called:
+```
+AUTHOR ?= Oz#? The program author
+
+build: PROGNAME ?= poof#? The binary name to output
+build: ## build the project
+    gcc -Wall -D AUTHOR=$(AUTHOR) project.c -o $(PROGNAME)
+```
+
+For example, the `Makefile` in this repository will print the following,
+when no target is given or when `make help` is called:
 
 ```
 Targets:
@@ -77,25 +116,3 @@ IMG:	 image name (default: $(shell basename $(CURDIR)))
 OPTS:	 add extra OPTS to misc commands
 ORG:	 organization to push (default: oz123)
 ```
-
-This make file parses all the lines and checks for target, local variables
-and global variables.
-If they are suffixed with `##` or `#?` the string that follows is interpreted
-as the help for that variable or target.
-This is much better then maintaining a help target manually for larger
-projects.
-
-The targets can be used with parameters like this:
-
-```
-make docker-build IMG=foo TAG=0.1
-```
-
-Or:
-
-```
-make test COLOR=red HOST=red.example.org
-```
-
-See this project's `Makefile` for examples demonstrating
-how to define and document global vars, local vars and targets.
