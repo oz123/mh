@@ -58,7 +58,7 @@ PROGNAME = mh
 mh:  ## compile this software
 	gcc $(CFLAGS) queue.c mh.c $(OPTS) -o $(PROGNAME)
 
-install:  ## install this software
+install:  mh ## install this software
 	install -m 755 mh $(PREFIX)$(BINDIR)/$(PROGNAME)
 
 unistall:

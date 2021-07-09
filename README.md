@@ -32,31 +32,50 @@ help:
 You can then document the `Makefile` targets with `##` after each target,
 or `#?` after a variable.
 
-For example the file `make` in this repo will print the following when no
+For example the `Makefile` in this repo will print the following when no
 target is given or when `make help` is called:
 
 ```
-$ make
 Targets:
 
-test                 test that the HOST shows background COLOR
+bbbbb/color		test that the HOST shows background COLOR
 
-  HOST - what host is running NGinx
-  COLOR - which color should be the backround
+	Options:
 
-docker-build         build a docker image
+	HOST: what host is running NGinx (default: localhost)
+	COLOR: which color should be the backround (default: green)
 
+some/people/organize/their/targets/like/directories		you know just because you can
 
-docker-push          push docker image to $(REGISTRY)
+ffff-color		test that the HOST shows background COLOR
 
+	Options:
 
-Global Variables you can override:
+	HOST: what host is running NGinx (default: localhost)
+	COLOR: which color should be the backround (default: green)
 
-VERSION              version
-REGISTRY             container registry to push
-ORG                  organization to push to
-IMG                  image name
-OPTS                 add extra OPTS to misc commands
+test_color		test that the HOST shows background COLOR
+
+	Options:
+
+	HOST: what host is running NGinx (default: localhost)
+	COLOR: which color should be the backround (default: green)
+
+docker-build		build a docker image
+
+docker-push		push docker image to $(REGISTRY)
+
+mh		compile this software
+
+install		install this software
+
+Global options you can override:
+
+VERSION:	 version (default: $(shell git describe --always))
+REGISTRY:	 container registry to push (default: docker.io)
+IMG:	 image name (default: $(shell basename $(CURDIR)))
+OPTS:	 add extra OPTS to misc commands
+ORG:	 organization to push (default: oz123)
 ```
 
 This make file parses all the lines and checks for target, local variables
