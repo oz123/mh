@@ -49,6 +49,9 @@ target_t *copy_target(target_t *target) {
     copy->help = (char*)malloc(string_length(target->help) * sizeof(PCRE2_UCHAR));
     strcpy(copy->name, target->name);
     strcpy(copy->help, target->help);
+    while (!queue_is_empty(target->locals)) {
+        queue_push_tail(copy->locals, queue_pop_head(target->locals));
+    }
     return copy;
 }
 
