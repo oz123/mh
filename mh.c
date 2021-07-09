@@ -60,7 +60,14 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
             memcpy(variable->help, substr_buf, substr_buf_len);
          }
      }
-
+     
+     if (variable != NULL) {
+         int copydefault_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"default", &substr_buf, &substr_buf_len);
+         if (copydefault_rc == 0) {
+             variable->default_value = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
+             memcpy(variable->default_value, substr_buf, substr_buf_len);
+         }
+     }
      pcre2_match_data_free(match_data);   /* Release memory used for the match */
      return 0;
 }
@@ -146,7 +153,7 @@ main(int argc, char *argv[])
     variable_t *gv = new_variable();
     while (!queue_is_empty(globals)) {
         gv = queue_pop_head(globals);
-        printf("I have var %p %s %s\n", gv, gv->name, gv->help);
+        printf("I have global %p %s %s (default: %s)\n", gv, gv->name, gv->help, gv->default_value);
     }
 
     pcre2_code_free(regex_target);

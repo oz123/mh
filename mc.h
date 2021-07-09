@@ -7,8 +7,7 @@
 
 # define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_/-]+):.*?## (?P<help>.*)$"
 # define REGEX_LOCAL_VAR "^(?P<name>[a-zA-Z_/-]+):.(?P<var>[A-Z_]+).*#? (?P<help>.*)$"
-# define REGEX_GLOBAL_VAR "^(?P<name>[A-Z_]+).*#? (?P<help>.*)$"
-
+# define REGEX_GLOBAL_VAR "^(?P<name>[A-Z_]+).*?= ?(?P<default>.*)#\\?(?P<help>.*)$"
 int string_length(char *s) {
   if (*s == '\0') // Base condition
     return 0;
