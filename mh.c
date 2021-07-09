@@ -7,6 +7,14 @@
 #include <pcre2.h>
 #include "mc.h"
 
+void usage() {
+    fprintf(stderr, PROGNAME " [ --help | --version ]\n");
+    fprintf(stderr, PROGNAME "parses a file via stdin:\n\n");
+    fprintf(stderr, "\t$ cat Makefile | "PROGNAME"\n\n");
+    fprintf(stderr, "or inside a Makefile target:\n\n");
+    fprintf(stderr, "\t@"PROGNAME " <$(MAKEFILE_LIST)\n");
+}
+
 int check_line_for_global_var(char *line, variable_t *variable, pcre2_code *regex) {
     return check_line_for_regex(line, NULL, variable, regex, 0);
 }
@@ -105,6 +113,18 @@ void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
 int
 main(int argc, char *argv[])
 {
+
+    if (argc > 1) {
+        if(!strcmp("--version", argv[1])){
+            fprintf(stderr, "%s %s (c) %s\n", PROGNAME, VERSION, AUTHOR);
+            exit(0);
+        }
+
+        if (!strcmp("--help", argv[1])){
+            usage();
+            exit(1);
+        }
+    }
     char *line = NULL;
     size_t len = 0;
     size_t line_length;

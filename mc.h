@@ -9,6 +9,10 @@
 # define REGEX_LOCAL_VAR "^(?P<target>[a-zA-Z_\\/-]+): ?(?P<name>[A-Z_]+) ?\\?= (?P<default>.*) #\\? ?(?P<help>.*)$"
 # define REGEX_GLOBAL_VAR "^(?P<name>[A-Z_]+).*?= ?(?P<default>.*)#\\?(?P<help>.*)$"
 
+# define PROGNAME "mh"
+# define VERSION "0.1"
+# define AUTHOR "Oz Tiram <oz.tiram __At__ gmail.com>"
+
 # ifdef COLOROUTPUT
 # define CYN   "\x1B[36m"
 # define UNDR "\x1B[4m"
