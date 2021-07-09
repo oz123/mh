@@ -6,8 +6,22 @@
 #include <pcre2.h>
 
 # define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_/-]+):.*?## (?P<help>.*)$"
-# define REGEX_LOCAL_VAR "^(?P<name>[a-zA-Z_\\/-]+): ?(?P<var>[A-Z_]+) ?\\?= (?P<default>.*) #\\? ?(?P<help>.*)$"
+# define REGEX_LOCAL_VAR "^(?P<target>[a-zA-Z_\\/-]+): ?(?P<name>[A-Z_]+) ?\\?= (?P<default>.*) #\\? ?(?P<help>.*)$"
 # define REGEX_GLOBAL_VAR "^(?P<name>[A-Z_]+).*?= ?(?P<default>.*)#\\?(?P<help>.*)$"
+
+# ifdef COLOROUTPUT
+# define CYN   "\x1B[36m"
+# define UNDR "\x1B[4m"
+# define WHT   "\x1B[37m"
+# define RESET "\x1B[0m"
+# endif
+# ifndef COLOROUTPUT
+# define CYN   ""
+# define WHT   ""
+# define RESET ""
+# define UNDR ""
+# endif
+
 int string_length(char *s) {
   if (*s == '\0') // Base condition
     return 0;
