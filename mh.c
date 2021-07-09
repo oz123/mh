@@ -146,7 +146,7 @@ main(int argc, char *argv[])
         printf("I have target %p %s %s\n", target, target->name, target->help);
         while (!queue_is_empty(target->locals)) {
             lv = queue_pop_head(target->locals);
-            printf("I have local var %p %s %s\n", lv, lv->name, lv->help);
+            printf("I have local var %p %s %s (default: %s)\n", lv, lv->name, lv->help, lv->default_value);
         }
     }
  
