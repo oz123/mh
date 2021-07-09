@@ -158,9 +158,6 @@ main(int argc, char *argv[])
         printf(CYN UNDR "\nGlobal options you can override:\n\n" RESET);
         while (!queue_is_empty(globals)) {
             gv = queue_pop_head(globals);
-            if (gv->default_value != NULL) {
-
-            }
             printf("%s:\t%s", gv->name, gv->help);
             if (string_length(gv->default_value) != 0) {
                 printf(" (default: %s)\n", gv->default_value);
