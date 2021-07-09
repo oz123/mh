@@ -89,6 +89,12 @@ pcre2_code *compile_regex(char *regex){
     return reg;
 }
 
+void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
+    *a = compile_regex(REGEX_HELP_TARGET);
+    *b = compile_regex(REGEX_GLOBAL_VAR);
+    *c = compile_regex(REGEX_LOCAL_VAR);
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -102,8 +108,7 @@ main(int argc, char *argv[])
     target_t *target = new_target();
 
     pcre2_code *regex_target, *regex_local, *regex_global;
-
-    regex_target = compile_regex(REGEX_HELP_TARGET);
+    init_pcre_regex(&regex_target, &regex_global, &regex_local);
     regex_global = compile_regex(REGEX_GLOBAL_VAR);
     regex_local = compile_regex(REGEX_LOCAL_VAR);
 
