@@ -1,6 +1,6 @@
-# help-make-helper
+# mh
 
-A small python program you put in your Makefile to produce fancy help
+A small program you put in your Makefile to produce fancy help
 
 Building modern software requires a lot of tools. I can't and I don't want
 to memorize or type all these commands over and over again (docker, npm,
@@ -12,7 +12,10 @@ you to run all the test, build and deploy phases locally.
 
 Install this package in your path with:
 ```
-$ pip install make-help-helper
+$ git clone https://github.com/oz123/mh
+$ cd mh
+$ make mh
+$ sudo make install
 ```
 
 Add PHONY target to your `Makefile` called `help` and set it to be the default:
@@ -21,10 +24,8 @@ Add PHONY target to your `Makefile` called `help` and set it to be the default:
 
 .PHONY: help
 
-PY ?= python3
-
 help:
-	@$(PY) make-help-helper.py < $(MAKEFILE_LIST)
+	@mh < $(MAKEFILE_LIST)
 
 ```
 
@@ -76,3 +77,6 @@ Or:
 ```
 make test COLOR=red HOST=red.example.org
 ```
+
+See this project's `Makefile` for examples demonstrating
+how to define and document global vars, local vars and targets.
