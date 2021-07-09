@@ -179,7 +179,7 @@ main(int argc, char *argv[])
         while (!queue_is_empty(globals)) {
             gv = queue_pop_head(globals);
             printf("%s:\t%s", gv->name, gv->help);
-            if (string_length(gv->default_value) != 0) {
+            if (strlen(gv->default_value) != 0) {
                 printf(" (default: %s)\n", gv->default_value);
             } else {
                 printf("\n");

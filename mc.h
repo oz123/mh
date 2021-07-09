@@ -26,13 +26,6 @@
 # define UNDR ""
 # endif
 
-int string_length(char *s) {
-  if (*s == '\0') // Base condition
-    return 0;
-
-  return (1 + string_length(++s));
-}
-
 /**
  * Targets have names, help text and local variables
  */
@@ -62,8 +55,8 @@ target_t *new_target(void) {
 
 target_t *copy_target(target_t *target) {
     target_t *copy = new_target();
-    copy->name = (char*)malloc(string_length(target->name) * sizeof(PCRE2_UCHAR));
-    copy->help = (char*)malloc(string_length(target->help) * sizeof(PCRE2_UCHAR));
+    copy->name = (char*)malloc(strlen(target->name) * sizeof(PCRE2_UCHAR));
+    copy->help = (char*)malloc(strlen(target->help) * sizeof(PCRE2_UCHAR));
     strcpy(copy->name, target->name);
     strcpy(copy->help, target->help);
     while (!queue_is_empty(target->locals)) {
