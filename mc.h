@@ -86,10 +86,12 @@ void free_variable(variable_t *variable){
 }
 
 /**
- * check line for regex
+ * Check line for regex
+ *
  * @param line      a text line
  * @target          target_t a target pointer
  * @variable        variable_t variable pointer
+ * @return          0 for a match, 1 for non match
  **/
 int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcre2_code *regex);
 
@@ -97,18 +99,38 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
  * Check that a line in file is in the form of <traget-name: ## help for the target>
  * <target-name>: <var-name> ?= <default value> #? <help string>
  * <var-name> ?= <default value>#? <help string>
+ *
+ * @param line      a text line
+ * @target          target_t a target pointer
+ * @variable        variable_t variable pointer
+ * @return          0 for a match, 1 for non match
  */
 int check_line_for_global_var(char *line, variable_t *global, pcre2_code *regex);
 
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
  * <target-name>: <var-name> ?= <default value> #? <help string>
+ *
+ * @param line      a text line
+ * @variable        variable_t variable pointer
+ * @regex           pcre2_code pointer 
+ * @return          0 for a match, 1 for non match
  */
 int check_line_for_local_var(char *line, variable_t *local, pcre2_code *regex);
 
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
+ *
+ * @param line      a text line
+ * @target          target_t a target pointer
+ * @regex           pcre2_code pointer 
+ * @return          0 for a match, 1 for non match
  */
 int check_line_for_target(char *line, target_t *target, pcre2_code *regex);
 
+/**
+ * Compile a string to Regex object
+ *
+ * @param regex     string containing a regex
+ */
 pcre2_code *compile_regex(char *regex);

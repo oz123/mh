@@ -139,19 +139,19 @@ main(int argc, char *argv[])
 
     while ((line_length = getline(&line, &len, stdin)) != -1) {
         variable_t *variable = new_variable();
-        if (check_line_for_global_var(line, variable, regex_global) == 0) {
+        if (!check_line_for_global_var(line, variable, regex_global)) {
             queue_push_tail(globals, variable);
             continue;
         }
 
-        if (check_line_for_local_var(line, variable, regex_local) == 0) {
+        if (!check_line_for_local_var(line, variable, regex_local)) {
             queue_push_tail(target->locals, variable);
             if (queue_is_empty(target->locals) != 0) {
                 queue_push_tail(target->locals, variable);
             }
             continue;
         }
-        if (check_line_for_target(line, target, regex_target) == 0) {
+        if (!check_line_for_target(line, target, regex_target)) {
             target_t *copy = copy_target(target);
             queue_push_tail(targets, copy);
         }
