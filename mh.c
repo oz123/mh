@@ -16,18 +16,18 @@ void usage() {
 }
 
 int check_line_for_global_var(char *line, variable_t *variable, pcre2_code *regex) {
-    return check_line_for_regex(line, NULL, variable, regex, 0);
+    return check_line_for_regex(line, NULL, variable, regex);
 }
 
 int check_line_for_local_var(char *line, variable_t *variable, pcre2_code *regex) {
-    return check_line_for_regex(line, NULL, variable, regex, 0);
+    return check_line_for_regex(line, NULL, variable, regex);
 }
 
 int check_line_for_target(char *line, target_t *target, pcre2_code *regex) {
-    return check_line_for_regex(line, target, NULL, regex, 0);
+    return check_line_for_regex(line, target, NULL, regex);
 }
 
-int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcre2_code *regex, int local) {
+int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcre2_code *regex) {
 
     pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(regex, NULL);
 

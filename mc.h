@@ -87,12 +87,11 @@ void free_variable(variable_t *variable){
 
 /**
  * check line for regex
- * line - a text line
- * target - a target pointer
- * variable - a variable pointer
- * local - check if matching for local target
+ * @param line      a text line
+ * @target          target_t a target pointer
+ * @variable        variable_t variable pointer
  **/
-int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcre2_code *regex, int local);
+int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcre2_code *regex);
 
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
