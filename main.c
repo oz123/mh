@@ -36,6 +36,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "queue.h"
 #include "mh.h"
 
+static char words[NUMBER_OF_STRINGS][MAX_STRING_SIZE] = {"foo", "bar", "baz", "ping", "pong"};
+
 int
 main(int argc, char *argv[])
 {
@@ -95,13 +97,22 @@ main(int argc, char *argv[])
             if (!strcmp(target->name, lookup)) {
                 printf(CYN UNDR "Help for target:" RESET " %s\n\n", lookup);
                 printf("%s\n\n", target->help);
-                printf("Options:\n");
-                // TODO: use realloc here to build a string for usage ...
-                while (!queue_is_empty(target->locals)) {
-                    lv = queue_pop_head(target->locals);
-                    printf("\t%s: %s (default: %s)\n\n", lv->name, lv->help, lv->default_value);
+                if (!queue_is_empty(target->locals)) {
+                    char *usage = (char *)malloc(5*sizeof(char));
+                    usage = (char *)realloc(usage, strlen(target->name) + 13);
+                    sprintf(usage, "Usage: make %s", target->name);
+                    printf("Options:\n");
+                    while (!queue_is_empty(target->locals)) {
+                        lv = queue_pop_head(target->locals);
+                        printf("\t%s: %s (default: %s)\n\n", lv->name, lv->help, lv->default_value);
+                        usage = (char *)realloc(usage, strlen(usage) + strlen(lv->name) + 1);
+                        char *r = words[rand() % NUMBER_OF_STRINGS];
+                        char *fragment = (char *)malloc(strlen(lv->name) + 1 + strlen(r) + 1);
+                        sprintf(fragment, " %s=%s", lv->name, r);
+                        strcat(usage, fragment);
+                    }
+                    printf("%s\n", usage);
                 }
-
             }
         }
         exit(0);
