@@ -73,7 +73,10 @@ target_t *copy_target(target_t*);
  * Show the help for a single target and exit
  */
 void show_target_help(char *, Queue *);
-
+/**
+ * Show all targets and globals help and exit
+ */
+void show_all_help(Queue *, Queue *);
 /**
  * variable global or local
  */

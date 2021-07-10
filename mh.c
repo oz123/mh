@@ -91,8 +91,8 @@ void show_target_help(char *targetname, Queue *targets) {
                 }
             }
         }
+        exit(0);
     }
-    exit(0);
 }
 
 variable_t *new_variable(void) {
@@ -212,3 +212,36 @@ void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
     *c = compile_regex(REGEX_LOCAL_VAR);
 }
 
+void show_all_help(Queue *targets, Queue *globals) {
+    variable_t *lv = new_variable();
+    target_t *target = new_target();
+
+    printf(CYN UNDR "Targets:\n" RESET);
+    while (!queue_is_empty(targets)) {
+        target = queue_pop_head(targets);
+        printf("\n" CYN "%s" RESET "\t\t%s\n", target->name, target->help);
+        if (!queue_is_empty(target->locals)) {
+            printf("\n\tOptions:\n\n");
+        }
+        while (!queue_is_empty(target->locals)) {
+            lv = queue_pop_head(target->locals);
+            printf("\t%s: %s (default: %s)\n", lv->name, lv->help, lv->default_value);
+        }
+    }
+
+    if (!queue_is_empty(globals)) {
+        variable_t *gv = new_variable();
+        printf(CYN UNDR "\nGlobal options you can override:\n\n" RESET);
+        while (!queue_is_empty(globals)) {
+            gv = queue_pop_head(globals);
+            printf("%s:\t%s", gv->name, gv->help);
+            if (strlen(gv->default_value) != 0) {
+                printf(" (default: %s)\n", gv->default_value);
+            } else {
+                printf("\n");
+            }
+        }
+        free_variable(gv);
+    }
+
+}

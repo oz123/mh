@@ -92,36 +92,8 @@ main(int argc, char *argv[])
 
     show_target_help(lookup, targets);
 
-    variable_t *lv = new_variable();
-    printf(CYN UNDR "Targets:\n" RESET);
-    while (!queue_is_empty(targets)) {
-        target = queue_pop_head(targets);
-        printf("\n" CYN "%s" RESET "\t\t%s\n", target->name, target->help);
-        if (!queue_is_empty(target->locals)) {
-            printf("\n\tOptions:\n\n");
-        }
-        while (!queue_is_empty(target->locals)) {
-            lv = queue_pop_head(target->locals);
-            printf("\t%s: %s (default: %s)\n", lv->name, lv->help, lv->default_value);
-        }
-    }
- 
-    if (!queue_is_empty(globals)) {
-        variable_t *gv = new_variable();
-        printf(CYN UNDR "\nGlobal options you can override:\n\n" RESET);
-        while (!queue_is_empty(globals)) {
-            gv = queue_pop_head(globals);
-            printf("%s:\t%s", gv->name, gv->help);
-            if (strlen(gv->default_value) != 0) {
-                printf(" (default: %s)\n", gv->default_value);
-            } else {
-                printf("\n");
-            }
-        }
-        free_variable(gv);
-    }
+    show_all_help(targets, globals);
 
-    free_variable(lv);
     pcre2_code_free(regex_target);
     pcre2_code_free(regex_local);
     pcre2_code_free(regex_global);
