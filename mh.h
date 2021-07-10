@@ -68,6 +68,12 @@ typedef struct target {
 target_t *new_target();
 void free_target(target_t*);
 target_t *copy_target(target_t*);
+
+/**
+ * Show the help for a single target and exit
+ */
+void show_target_help(char *, Queue *);
+
 /**
  * variable global or local
  */
