@@ -32,7 +32,47 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <string.h>
 #include <pcre2.h>
-#include "mc.h"
+#include "mh.h"
+
+target_t *new_target(void) {
+    target_t *target = (target_t *) malloc(sizeof(target_t));
+    target->name = NULL;
+    target->help = NULL;
+    target->locals = queue_new();
+    return target;
+}
+
+target_t *copy_target(target_t *target) {
+    target_t *copy = new_target();
+    copy->name = (char*)malloc(strlen(target->name) * sizeof(PCRE2_UCHAR));
+    copy->help = (char*)malloc(strlen(target->help) * sizeof(PCRE2_UCHAR));
+    strcpy(copy->name, target->name);
+    strcpy(copy->help, target->help);
+    while (!queue_is_empty(target->locals)) {
+        queue_push_tail(copy->locals, queue_pop_head(target->locals));
+    }
+    return copy;
+}
+
+void free_target(target_t *target) {
+    free(target->name);
+    free(target->help);
+    queue_free(target->locals);
+}
+
+variable_t *new_variable(void) {
+    variable_t *variable = (variable_t *) malloc(sizeof(variable_t));
+    variable->name = NULL;
+    variable->default_value = NULL;
+    variable->help = NULL;
+    return variable;
+}
+
+void free_variable(variable_t *variable){
+    free(variable->name);
+    free(variable->default_value);
+    free(variable->help);
+}
 
 void usage() {
     fprintf(stderr, PROGNAME " [ --help | --version ]\n");
@@ -137,112 +177,3 @@ void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
     *c = compile_regex(REGEX_LOCAL_VAR);
 }
 
-int
-main(int argc, char *argv[])
-{
-    char *lookup = NULL;
-    if (argc > 1) {
-        if(!strcmp("--version", argv[1])){
-            fprintf(stderr, "%s %s (c) %s\n", PROGNAME, VERSION, AUTHOR);
-            exit(0);
-        }
-
-        else if (!strcmp("--help", argv[1])){
-            usage();
-            exit(1);
-        }
-
-        else {
-            lookup = argv[1];
-        }
-    }
-    char *line = NULL;
-    size_t len = 0;
-    size_t line_length;
-
-    Queue* targets = queue_new();
-    Queue* globals = queue_new();
-
-    target_t *target = new_target();
-
-    pcre2_code *regex_target, *regex_local, *regex_global;
-    init_pcre_regex(&regex_target, &regex_global, &regex_local);
-
-    while ((line_length = getline(&line, &len, stdin)) != -1) {
-        variable_t *variable = new_variable();
-        if (!check_line_for_global_var(line, variable, regex_global)) {
-            queue_push_tail(globals, variable);
-            continue;
-        }
-
-        if (!check_line_for_local_var(line, variable, regex_local)) {
-            queue_push_tail(target->locals, variable);
-            if (queue_is_empty(target->locals) != 0) {
-                queue_push_tail(target->locals, variable);
-            }
-            continue;
-        }
-        if (!check_line_for_target(line, target, regex_target)) {
-            target_t *copy = copy_target(target);
-            queue_push_tail(targets, copy);
-        }
-        /* target or variable were not pushed to queue, hence they can be released */
-        free_variable(variable);
-    }
-    variable_t *lv = new_variable();
-    if (lookup != NULL) {
-        while (!queue_is_empty(targets)) {
-            target = queue_pop_head(targets);
-            if (!strcmp(target->name, lookup)) {
-                printf(CYN UNDR "Help for target:" RESET " %s\n\n", lookup);
-                printf("%s\n\n", target->help);
-                printf("Options:\n");
-                // TODO: use realloc here to build a string for usage ...
-                while (!queue_is_empty(target->locals)) {
-                    lv = queue_pop_head(target->locals);
-                    printf("\t%s: %s (default: %s)\n\n", lv->name, lv->help, lv->default_value);
-                }
-
-            }
-        }
-        exit(0);
-    }
-
-    printf(CYN UNDR "Targets:\n" RESET);
-    while (!queue_is_empty(targets)) {
-        target = queue_pop_head(targets);
-        printf("\n" CYN "%s" RESET "\t\t%s\n", target->name, target->help);
-        if (!queue_is_empty(target->locals)) {
-            printf("\n\tOptions:\n\n");
-        }
-        while (!queue_is_empty(target->locals)) {
-            lv = queue_pop_head(target->locals);
-            printf("\t%s: %s (default: %s)\n", lv->name, lv->help, lv->default_value);
-        }
-    }
- 
-    if (!queue_is_empty(globals)) {
-        variable_t *gv = new_variable();
-        printf(CYN UNDR "\nGlobal options you can override:\n\n" RESET);
-        while (!queue_is_empty(globals)) {
-            gv = queue_pop_head(globals);
-            printf("%s:\t%s", gv->name, gv->help);
-            if (strlen(gv->default_value) != 0) {
-                printf(" (default: %s)\n", gv->default_value);
-            } else {
-                printf("\n");
-            }
-        }
-        free_variable(gv);
-    }
-
-    free_variable(lv);
-    pcre2_code_free(regex_target);
-    pcre2_code_free(regex_local);
-    pcre2_code_free(regex_global);
-    free_target(target);
-    queue_free(targets);
-    queue_free(globals);
-    free(line);
-    exit(EXIT_SUCCESS);
-}

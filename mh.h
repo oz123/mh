@@ -54,7 +54,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # endif
 
 /**
- * Targets have names, help text and local variables
+* Targets have names, help text and local variables
  */
 typedef struct target {
   char *name;
@@ -62,6 +62,9 @@ typedef struct target {
   Queue *locals;
 } target_t;
 
+target_t *new_target();
+void free_target(target_t*);
+target_t *copy_target(target_t*);
 /**
  * variable global or local
  */
@@ -71,46 +74,12 @@ typedef struct variable {
   char *help;
 } variable_t;
 
-
-target_t *new_target(void) {
-    target_t *target = (target_t *) malloc(sizeof(target_t));
-    target->name = NULL;
-    target->help = NULL;
-    target->locals = queue_new();
-    return target;
-}
-
-target_t *copy_target(target_t *target) {
-    target_t *copy = new_target();
-    copy->name = (char*)malloc(strlen(target->name) * sizeof(PCRE2_UCHAR));
-    copy->help = (char*)malloc(strlen(target->help) * sizeof(PCRE2_UCHAR));
-    strcpy(copy->name, target->name);
-    strcpy(copy->help, target->help);
-    while (!queue_is_empty(target->locals)) {
-        queue_push_tail(copy->locals, queue_pop_head(target->locals));
-    }
-    return copy;
-}
-
-void free_target(target_t *target) {
-    free(target->name);
-    free(target->help);
-    queue_free(target->locals);
-}
-
-variable_t *new_variable(void) {
-    variable_t *variable = (variable_t *) malloc(sizeof(variable_t));
-    variable->name = NULL;
-    variable->default_value = NULL;
-    variable->help = NULL;
-    return variable;
-}
-
-void free_variable(variable_t *variable){
-    free(variable->name);
-    free(variable->default_value);
-    free(variable->help);
-}
+variable_t *new_variable();
+void free_variable();
+/**
+ * Show the program usage and exit
+ */
+void usage();
 
 /**
  * Check line for regex
@@ -161,3 +130,5 @@ int check_line_for_target(char *line, target_t *target, pcre2_code *regex);
  * @param regex     string containing a regex
  */
 pcre2_code *compile_regex(char *regex);
+
+void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c);
