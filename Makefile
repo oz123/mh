@@ -4,16 +4,19 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
+.PHONY: help
+help:
+	@cat <$(MAKEFILE_LIST) | mh $(TARGET)
+ifndef TARGET
+	@echo ""
+	@echo "use \`make help target=foo\` to learn more about foo"
+endif
 
 VERSION ?= $(shell git describe --always)#? version
 REGISTRY ?=docker.io#? container registry to push
 IMG ?= $(shell basename $(CURDIR))#? image name
 OPTS ?=#? add extra OPTS to misc commands
 ORG ?= oz123#? organization to push
-
-
-help:
-	@mh <$(MAKEFILE_LIST)
 
 bdbbb/color: HOST ?= localhost #? what host is running NGinx
 bbbbb/color: COLOR ?= green #? which color should be the backround
@@ -55,10 +58,10 @@ PREFIX = /usr/local
 BINDIR = /bin
 PROGNAME = mh
 
-mh::  ## compile this software
+mh:  ## compile this software
 	gcc $(CFLAGS) queue.c mh.c $(OPTS) -o $(PROGNAME)
 
-install:  mh ## install this software
+install:  ## install this software
 	install -m 755 mh $(PREFIX)$(BINDIR)/$(PROGNAME)
 
 unistall:

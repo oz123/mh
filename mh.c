@@ -140,16 +140,20 @@ void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
 int
 main(int argc, char *argv[])
 {
-
+    char *lookup = NULL;
     if (argc > 1) {
         if(!strcmp("--version", argv[1])){
             fprintf(stderr, "%s %s (c) %s\n", PROGNAME, VERSION, AUTHOR);
             exit(0);
         }
 
-        if (!strcmp("--help", argv[1])){
+        else if (!strcmp("--help", argv[1])){
             usage();
             exit(1);
+        }
+
+        else {
+            lookup = argv[1];
         }
     }
     char *line = NULL;
@@ -185,8 +189,25 @@ main(int argc, char *argv[])
         /* target or variable were not pushed to queue, hence they can be released */
         free_variable(variable);
     }
-
     variable_t *lv = new_variable();
+    if (lookup != NULL) {
+        while (!queue_is_empty(targets)) {
+            target = queue_pop_head(targets);
+            if (!strcmp(target->name, lookup)) {
+                printf(CYN UNDR "Help for target:" RESET " %s\n\n", lookup);
+                printf("%s\n\n", target->help);
+                printf("Options:\n");
+                // TODO: use realloc here to build a string for usage ...
+                while (!queue_is_empty(target->locals)) {
+                    lv = queue_pop_head(target->locals);
+                    printf("\t%s: %s (default: %s)\n\n", lv->name, lv->help, lv->default_value);
+                }
+
+            }
+        }
+        exit(0);
+    }
+
     printf(CYN UNDR "Targets:\n" RESET);
     while (!queue_is_empty(targets)) {
         target = queue_pop_head(targets);

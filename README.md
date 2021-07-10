@@ -49,12 +49,13 @@ $ sudo make install
 Add PHONY target to your `Makefile` called `help` and set it to be the default:
 ```
 .DEFAULT_GOAL := help
-
 .PHONY: help
-
 help:
-	@mh < $(MAKEFILE_LIST)
-
+	@cat <$(MAKEFILE_LIST) | mh $(TARGET)
+ifndef TARGET
+	@echo ""
+	@echo "use \`make help target=foo\` to learn more about foo"
+endif
 ```
 
 You can then document the `Makefile` targets with `##` after each target,
@@ -115,4 +116,18 @@ REGISTRY:	 container registry to push (default: docker.io)
 IMG:	 image name (default: $(shell basename $(CURDIR)))
 OPTS:	 add extra OPTS to misc commands
 ORG:	 organization to push (default: oz123)
+```
+
+You can also learn more about a specific target by doing:
+
+```
+$ make help TARGET=test_color
+Help for target: test_color
+
+test that the HOST shows background COLOR
+
+Options:
+	HOST: what host is running NGinx (default: localhost)
+
+	COLOR: which color should be the backround (default: green)
 ```
