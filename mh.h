@@ -53,6 +53,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # define UNDR ""
 # endif
 
+#define NUMBER_OF_STRINGS 5
+#define MAX_STRING_SIZE 40
+
 /**
 * Targets have names, help text and local variables
  */
