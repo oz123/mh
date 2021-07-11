@@ -6,10 +6,10 @@ SHELL := /bin/bash
 
 .PHONY: help
 help:
-	@mh $(TARGET)
-ifndef TARGET
+	@mh -f $(MAKEFILE_LIST) $(target)
+ifndef target
 	@echo ""
-	@echo "use \`mh foo\` to learn more about foo"
+	@echo "Use \`make help target=foo\` to learn more about foo."
 endif
 
 DEBUG = -g -fsanitize=address
