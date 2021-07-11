@@ -68,10 +68,6 @@ find_cmd(const char *arg)
 
 void usage(struct command *cmd) {
     fprintf(stderr, PROGNAME " [ --help | --version | --file <Makefile> ] [target]\n");
-    fprintf(stderr, PROGNAME " parses a file via stdin:\n\n");
-    fprintf(stderr, "\t$ cat Makefile | "PROGNAME"\n\n");
-    fprintf(stderr, "or inside a Makefile target:\n\n");
-    fprintf(stderr, "\t@"PROGNAME " <$(MAKEFILE_LIST)\n");
     fprintf(stderr, "\nOptions:\n");
 	for (int i = 0; cmd[i].name != NULL; i++) {
         fprintf(stderr, "  %s, %s\t\t\t%s\n", cmd[i].shortcut, cmd[i].name, cmd[i].descr);
