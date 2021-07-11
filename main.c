@@ -34,27 +34,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h>
 #include <pcre2.h>
 #include "queue.h"
+#include "cmd.h"
 #include "mh.h"
 
+
+static int	find_cmd(const char *);
 
 int
 main(int argc, char *argv[])
 {
     char *lookup = NULL;
     if (argc > 1) {
-        if(!strcmp("--version", argv[1])){
-            fprintf(stderr, "%s %s (c) %s\n", PROGNAME, VERSION, AUTHOR);
-            exit(0);
+        int ch = find_cmd(argv[1]);
+        switch (ch) {
+            case CMD_HELP:
+                usage(cmd);
+                exit(1);
+            case CMD_VERSION:
+                fprintf(stderr, "%s %s (c) %s\n", PROGNAME, VERSION, AUTHOR);
+                exit(0);
+            default:
+                lookup = argv[1];
         }
 
-        else if (!strcmp("--help", argv[1])){
-            usage();
-            exit(1);
-        }
-
-        else {
-            lookup = argv[1];
-        }
     }
     char *line = NULL;
     size_t len = 0;

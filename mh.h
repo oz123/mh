@@ -26,19 +26,16 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #define PCRE2_CODE_UNIT_WIDTH 8
-#include "queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pcre2.h>
+#include "queue.h"
 
 # define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_/-]+):.*?## (?P<help>.*)$"
 # define REGEX_LOCAL_VAR "^(?P<target>[a-zA-Z_\\/-]+): ?(?P<name>[A-Z_]+) ?\\?= (?P<default>.*) #\\? ?(?P<help>.*)$"
 # define REGEX_GLOBAL_VAR "^(?P<name>[A-Z_]+).*?= ?(?P<default>.*)#\\?(?P<help>.*)$"
 
-# define PROGNAME "mh"
-# define VERSION "0.1"
-# define AUTHOR "Oz Tiram <oz.tiram __At__ gmail.com>"
 
 # ifdef COLOROUTPUT
 # define CYN   "\x1B[36m"
