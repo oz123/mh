@@ -175,20 +175,12 @@ void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
 }
 
 void show_all_help(Queue *targets, Queue *globals) {
-    variable_t *lv = new_variable();
     target_t *target = new_target();
 
     printf(CYN UNDR "Targets:\n" RESET);
     while (!queue_is_empty(targets)) {
         target = queue_pop_head(targets);
         printf("\n" CYN "%s" RESET "\t\t%s\n", target->name, target->help);
-        if (!queue_is_empty(target->locals)) {
-            printf("\n\tOptions:\n\n");
-        }
-        while (!queue_is_empty(target->locals)) {
-            lv = queue_pop_head(target->locals);
-            printf("\t%s: %s (default: %s)\n", lv->name, lv->help, lv->default_value);
-        }
     }
 
     if (!queue_is_empty(globals)) {
