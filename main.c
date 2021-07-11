@@ -44,23 +44,23 @@ int
 main(int argc, char *argv[])
 {
     char *lookup = NULL;
-    if (argc > 1) {
-        int ch = find_cmd(argv[1]);
-        switch (ch) {
-            case CMD_HELP:
-                usage(cmd);
-                exit(1);
-            case CMD_VERSION:
-                fprintf(stderr, "%s %s (c) %s\n", PROGNAME, VERSION, AUTHOR);
-                exit(0);
-            default:
-                lookup = argv[1];
-        }
-
-    }
+    char *filename = NULL;
     char *line = NULL;
     size_t len = 0;
     size_t line_length;
+
+    FILE *fp;
+
+    parse_args(argc, argv, &filename, &lookup);
+
+    //fprintf(stderr, "will parse %s\n", filename);
+    //fprintf(stderr, "target %s\n", lookup);
+    fp = fopen(filename, "r");
+
+    if (!fp) {
+        fprintf(stderr, "Error opening file '%s'\n", filename);
+        return EXIT_FAILURE;
+    }
 
     Queue* targets = queue_new();
     Queue* globals = queue_new();
@@ -70,7 +70,7 @@ main(int argc, char *argv[])
     pcre2_code *regex_target, *regex_local, *regex_global;
     init_pcre_regex(&regex_target, &regex_global, &regex_local);
 
-    while ((line_length = getline(&line, &len, stdin)) != -1) {
+    while ((line_length = getline(&line, &len, fp)) != -1) {
         variable_t *variable = new_variable();
         if (!check_line_for_global_var(line, variable, regex_global)) {
             queue_push_tail(globals, variable);
@@ -91,6 +91,8 @@ main(int argc, char *argv[])
         /* target or variable were not pushed to queue, hence they can be released */
         free_variable(variable);
     }
+
+    fclose(fp);
 
     show_target_help(lookup, targets);
 

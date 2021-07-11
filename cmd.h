@@ -28,11 +28,12 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define CMD_VERSION 1
 #define CMD_HELP 2
-#define CMD_FILE 2
+#define CMD_FILE 3
 
 # define PROGNAME "mh"
 # define VERSION "0.1"
@@ -66,7 +67,7 @@ find_cmd(const char *arg)
 
 
 void usage(struct command *cmd) {
-    fprintf(stderr, PROGNAME " [ --help | --version | --file <Makefile> ]\n");
+    fprintf(stderr, PROGNAME " [ --help | --version | --file <Makefile> ] [target]\n");
     fprintf(stderr, PROGNAME " parses a file via stdin:\n\n");
     fprintf(stderr, "\t$ cat Makefile | "PROGNAME"\n\n");
     fprintf(stderr, "or inside a Makefile target:\n\n");
@@ -77,24 +78,34 @@ void usage(struct command *cmd) {
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void
+parse_args(int argc, char *argv[], char **filename, char **lookup) {
+    if (argc > 1) {
+        int ch = find_cmd(argv[1]);
+        switch (ch) {
+            case CMD_HELP:
+                usage(cmd);
+                exit(1);
+            case CMD_VERSION:
+                fprintf(stderr, "%s %s (c) %s\n", PROGNAME, VERSION, AUTHOR);
+                exit(0);
+            case CMD_FILE:
+                if (argc < 3) {
+                    usage(cmd);
+                    exit(1);
+                }
+                *filename = argv[2];
+                break;
+       }
+    }
+    if (!*filename) {
+        *filename = "Makefile";
+        if (argc > 1) {
+            *lookup = argv[argc - 1];
+        }
+    } else {
+        if (argc > 3) {
+            *lookup = argv[3];
+        }
+    }
+}

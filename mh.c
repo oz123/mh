@@ -236,14 +236,14 @@ void show_target_help(char *targetname, Queue *targets) {
                     printf("%s\n", usage);
                     free(usage);
                 }
+                found = 1;
+                break;
             }
-            found = 1;
-            break;
         }
         if (found) {
             exit(EXIT_SUCCESS);
         } else {
-            fprintf(stderr, "No such target '%s'\n", targetname);
+            fprintf(stderr, "No such traget: %s\n", targetname);
             exit(EXIT_FAILURE);
         }
     }
