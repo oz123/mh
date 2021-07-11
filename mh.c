@@ -198,7 +198,6 @@ void show_all_help(Queue *targets, Queue *globals) {
         free_variable(gv);
 
     }
-    printf("\nUse `mh <target>` to learn more about a specific target.\n");
 }
 
 void show_target_help(char *targetname, Queue *targets) {
