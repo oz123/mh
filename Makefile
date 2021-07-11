@@ -18,11 +18,12 @@ OPTS = -D COLOROUTPUT
 PREFIX = /usr/local
 BINDIR = /bin
 PROGNAME = mh
+VERSION = $(shell git describe --always)
 clean:
 	rm -fv $(PROGNAME)
 
 mh:  ## compile this software
-	gcc $(CFLAGS) queue.c mh.c main.c $(OPTS) -o $(PROGNAME)
+	gcc $(CFLAGS) queue.c mh.c main.c $(OPTS) -D VERSION=\"$(VERSION)\" -o $(PROGNAME)
 
 install:  ## install this software
 	install -m 755 mh $(PREFIX)$(BINDIR)/$(PROGNAME)
