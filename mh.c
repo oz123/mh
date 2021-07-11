@@ -34,6 +34,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <pcre2.h>
 #include "mh.h"
 
+
+
 static char words[NUMBER_OF_STRINGS][MAX_STRING_SIZE] = {"foo", "bar", "baz", "ping", "pong"};
 
 target_t *new_target(void) {
@@ -109,13 +111,6 @@ void free_variable(variable_t *variable){
     free(variable->help);
 }
 
-void usage() {
-    fprintf(stderr, PROGNAME " [ --help | --version ]\n");
-    fprintf(stderr, PROGNAME "parses a file via stdin:\n\n");
-    fprintf(stderr, "\t$ cat Makefile | "PROGNAME"\n\n");
-    fprintf(stderr, "or inside a Makefile target:\n\n");
-    fprintf(stderr, "\t@"PROGNAME " <$(MAKEFILE_LIST)\n");
-}
 
 int check_line_for_global_var(char *line, variable_t *variable, pcre2_code *regex) {
     return check_line_for_regex(line, NULL, variable, regex);
