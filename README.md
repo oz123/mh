@@ -51,7 +51,7 @@ Add PHONY target to your `Makefile` called `help` and set it to be the default:
 .DEFAULT_GOAL := help
 .PHONY: help
 help:
-	@cat <$(MAKEFILE_LIST) | mh $(TARGET)
+	mh $(TARGET)
 ifndef TARGET
 	@echo ""
 	@echo "use \`make help target=foo\` to learn more about foo"
