@@ -31,3 +31,6 @@ install:  ## install this software
 
 uninstall: ## remove this software
 	rm -iv $(PREFIX)$(BINDIR)/$(PROGNAME)
+
+lint:
+	cppcheck --std=c99 --enable=all .
