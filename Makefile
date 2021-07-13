@@ -19,11 +19,12 @@ PREFIX = /usr/local
 BINDIR = /bin
 PROGNAME = mh
 VERSION = $(shell git describe --always)
+OBJECTS = queue.c mh.c main.c
 clean:
 	rm -fv $(PROGNAME)
 
 mh:  ## compile this software
-	gcc $(CFLAGS) queue.c mh.c main.c $(OPTS) -D VERSION=\"$(VERSION)\" -o $(PROGNAME)
+	gcc -o $(PROGNAME) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(OPTS)
 
 install:  ## install this software
 	install -m 755 mh $(PREFIX)$(BINDIR)/$(PROGNAME)
