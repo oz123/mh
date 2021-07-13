@@ -203,8 +203,8 @@ void show_all_help(Queue *targets, Queue *globals) {
 void show_target_help(char *targetname, Queue *targets) {
     variable_t *lv = new_variable();
     target_t *target = new_target();
-    int found = 0;
     if ( targetname != NULL) {
+        int found = 0;
         while (!queue_is_empty(targets)) {
             target = queue_pop_head(targets);
             if (!strcmp(target->name, targetname)) {
