@@ -4,6 +4,11 @@
 
 A small program you put in your Makefile to produce fancy help.
 
+## demo
+
+![mh-demo](https://raw.githubusercontent.com/oz123/mh/main/_docs/mh-demo.gif)
+
+## motivation
 Building modern software requires a lot of tools. I can't and I don't want
 to memorize or type all these commands over and over again (docker, npm,
 terraform, ansible, scss, etc). What ever your stack looks like, ``Makefile``
