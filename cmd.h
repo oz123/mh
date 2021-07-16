@@ -79,9 +79,13 @@ void usage(struct command *cmd) {
 void version() {
     fprintf(stderr, PROGNAME " " VERSION"\n");
     fprintf(stderr, "Copyright (C) 2021 " AUTHOR".\n");
+    fprintf(stderr, "This software is distributed under terms of:\n");
     fprintf(stderr, "BSD-2-Clause License\n");
     fprintf(stderr, "This is free software: you are free to change and redistribute it.\n");
     fprintf(stderr, "There is NO WARRANTY, to the extent permitted by law.\n");
+    fprintf(stderr, "This software uses components from:\n");
+    fprintf(stderr, "libpcre2: Copyright (c) 1997-2007 University of Cambridge\n");
+    fprintf(stderr, "qeueu.{c,h}: Copyright (c) 2005-2008 Simon Howard\n");
 }
 
 
