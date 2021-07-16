@@ -41,7 +41,11 @@ lint: CHECKS ?= all #? which check to enable (e.g. warning, style, etc...)
 lint:  ## static analysis with cppcheck
 	cppcheck --std=c99 --enable=$(CHECKS) --inline-suppr .
 
+deb-export-archive:
+	git archive --format=tar  HEAD | xz > ../mh_$(VERSION).orig.tar.xz
 
-build-deb:
+deb-version:
+	debchange -v $(shell echo $(VERSION) | sed "s/^v//") bump git version
+
+deb-build:
 	dpkg-buildpackage -us -uc
-
