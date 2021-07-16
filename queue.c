@@ -68,6 +68,7 @@ void queue_free(Queue *queue)
 	free(queue);
 }
 
+//cppcheck-suppress unusedFunction
 int queue_push_head(Queue *queue, QueueValue data)
 {
 	QueueEntry *new_entry;
@@ -146,6 +147,7 @@ QueueValue queue_pop_head(Queue *queue)
 	return result;
 }
 
+// cppcheck-suppress unusedFunction
 QueueValue queue_peek_head(Queue *queue)
 {
 	if (queue_is_empty(queue)) {
@@ -195,7 +197,7 @@ int queue_push_tail(Queue *queue, QueueValue data)
 
 	return 1;
 }
-
+// cppcheck-suppress unusedFunction
 QueueValue queue_pop_tail(Queue *queue)
 {
 	QueueEntry *entry;
@@ -234,6 +236,7 @@ QueueValue queue_pop_tail(Queue *queue)
 	return result;
 }
 
+// cppcheck-suppress unusedFunction
 QueueValue queue_peek_tail(Queue *queue)
 {
 	if (queue_is_empty(queue)) {
