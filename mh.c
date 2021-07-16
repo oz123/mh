@@ -175,6 +175,7 @@ void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
 }
 
 void show_all_help(Queue *targets, Queue *globals) {
+    //cppcheck-suppress unreadVariable
     target_t *target = new_target();
 
     printf(CYN UNDR "Targets:\n" RESET);
@@ -210,6 +211,7 @@ int show_target_help(char *targetname, Queue *targets) {
             printf("%s\n\n", target->help);
 
             if (!queue_is_empty(target->locals)) {
+                //cppcheck-suppress shadowFunction
                 char *usage = (char *)malloc(5 + strlen(target->name) + 13);
                 char *_usage;
                 sprintf(usage, "Usage: make %s", target->name);
