@@ -1,7 +1,7 @@
 Source: mh
 Section: Development
 Priority: optional
-Maintainer: Oz Tiram <oz.tiram@gmail.com>
+Maintainer: unknown <oznt@vmd39014.contaboserver.net>
 Build-Depends: debhelper (>= 10), libpcre2-dev
 Standards-Version: 4.1.2
 Homepage: https://github.com/oz123/mh
