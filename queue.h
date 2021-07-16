@@ -85,7 +85,6 @@ void queue_free(Queue *queue);
  *                   if it was not possible to allocate the memory for the
  *                   new entry.
  */
-
 int queue_push_head(Queue *queue, QueueValue data);
 
 /**
@@ -128,7 +127,6 @@ int queue_push_tail(Queue *queue, QueueValue data);
  * @return           Value that was at the head of the queue, or
  *                   @ref QUEUE_NULL if the queue is empty.
  */
-
 QueueValue queue_pop_tail(Queue *queue);
 
 /**
