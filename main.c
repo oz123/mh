@@ -94,9 +94,11 @@ main(int argc, char *argv[])
 
     fclose(fp);
 
-    show_target_help(lookup, targets);
-
-    show_all_help(targets, globals);
+    if (lookup) {
+        show_target_help(lookup, targets);
+    } else {
+        show_all_help(targets, globals);
+    }
 
     pcre2_code_free(regex_target);
     pcre2_code_free(regex_local);
