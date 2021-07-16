@@ -212,16 +212,13 @@ void show_target_help(char *targetname, Queue *targets) {
                 printf("%s\n\n", target->help);
                 if (!queue_is_empty(target->locals)) {
                     char *usage = (char *)malloc(5 + strlen(target->name) + 13);
-                    char *_usage = NULL;
+                    char *_usage;
                     sprintf(usage, "Usage: make %s", target->name);
                     printf("Options:\n");
                     while (!queue_is_empty(target->locals)) {
                         lv = queue_pop_head(target->locals);
                         printf("\t%s: %s (default: %s)\n\n", lv->name, lv->help, lv->default_value);
-                        _usage = (char *)realloc(usage, strlen(usage) + strlen(lv->name) + 1);
-                        if (_usage == NULL) {
-                            free(_usage);
-                        } else {
+                        if (_usage = (char *)realloc(usage, strlen(usage) + strlen(lv->name) + 1)) {
                             usage = _usage;
                         }
                         char *r = words[rand() % NUMBER_OF_STRINGS];
