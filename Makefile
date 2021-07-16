@@ -42,10 +42,10 @@ lint:  ## static analysis with cppcheck
 	cppcheck --std=c99 --enable=$(CHECKS) --inline-suppr .
 
 deb-export-archive:
-	git archive --format=tar  HEAD | xz > ../mh_$(VERSION).orig.tar.xz
+	git archive --format=tar  HEAD | xz > ../mh_$(shell echo $(VERSION) | sed "s/^v//; s/-[0-9a-g]*$$//").orig.tar.xz
 
 deb-version:
-	debchange -v $(shell echo $(VERSION) | sed "s/^v//") bump git version
+	debchange -b -v $(shell echo $(VERSION) | sed "s/^v//") bump git version
 
 deb-build:
 	dpkg-buildpackage -us -uc
