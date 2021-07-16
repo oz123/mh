@@ -203,42 +203,41 @@ void show_all_help(Queue *targets, Queue *globals) {
 void show_target_help(char *targetname, Queue *targets) {
     variable_t *lv = new_variable();
     target_t *target = new_target();
-    if ( targetname != NULL) {
-        int found = 0;
-        while (!queue_is_empty(targets)) {
-            target = queue_pop_head(targets);
-            if (!strcmp(target->name, targetname)) {
-                printf(CYN UNDR "Help for target:" RESET " %s\n\n", targetname);
-                printf("%s\n\n", target->help);
-                if (!queue_is_empty(target->locals)) {
-                    char *usage = (char *)malloc(5 + strlen(target->name) + 13);
-                    char *_usage;
-                    sprintf(usage, "Usage: make %s", target->name);
-                    printf("Options:\n");
-                    while (!queue_is_empty(target->locals)) {
-                        lv = queue_pop_head(target->locals);
-                        printf("\t%s: %s (default: %s)\n\n", lv->name, lv->help, lv->default_value);
-                        if (_usage = (char *)realloc(usage, strlen(usage) + strlen(lv->name) + 1)) {
-                            usage = _usage;
-                        }
-                        char *r = words[rand() % NUMBER_OF_STRINGS];
-                        char *fragment = (char *)malloc(strlen(lv->name) + 1 + strlen(r) + 1);
-                        sprintf(fragment, " %s=%s", lv->name, r);
-                        strcat(usage, fragment);
-                        free(fragment);
+    int found = 0;
+    while (!queue_is_empty(targets)) {
+        target = queue_pop_head(targets);
+        if (!strcmp(target->name, targetname)) {
+            printf(CYN UNDR "Help for target:" RESET " %s\n\n", targetname);
+            printf("%s\n\n", target->help);
+            if (!queue_is_empty(target->locals)) {
+                char *usage = (char *)malloc(5 + strlen(target->name) + 13);
+                char *_usage;
+                sprintf(usage, "Usage: make %s", target->name);
+                printf("Options:\n");
+                while (!queue_is_empty(target->locals)) {
+                    lv = queue_pop_head(target->locals);
+                    printf("\t%s: %s (default: %s)\n\n", lv->name, lv->help, lv->default_value);
+                    _usage = (char *)realloc(usage, strlen(usage) + strlen(lv->name) + 1);
+                    if (_usage) {
+                        usage = _usage;
                     }
-                    printf("%s\n", usage);
-                    free(usage);
+                    char *r = words[rand() % NUMBER_OF_STRINGS];
+                    char *fragment = (char *)malloc(strlen(lv->name) + 1 + strlen(r) + 1);
+                    sprintf(fragment, " %s=%s", lv->name, r);
+                    strcat(usage, fragment);
+                    free(fragment);
                 }
-                found = 1;
-                break;
+                printf("%s\n", usage);
+                free(usage);
             }
+            found = 1;
+            break;
         }
-        if (found) {
-            exit(EXIT_SUCCESS);
-        } else {
-            fprintf(stderr, "No such traget: %s\n", targetname);
-            exit(EXIT_FAILURE);
-        }
+    }
+    if (found) {
+        exit(EXIT_SUCCESS);
+    } else {
+        fprintf(stderr, "No such traget: %s\n", targetname);
+        exit(EXIT_FAILURE);
     }
 }
