@@ -22,6 +22,7 @@ BINDIR = /bin
 PROGNAME = mh
 VERSION = $(shell git describe --always)
 OBJECTS = queue.c mh.c main.c
+
 clean:
 	rm -fv $(PROGNAME)
 
@@ -29,8 +30,8 @@ mh:  ## compile this software
 	gcc -o $(PROGNAME) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(OPTS)
 
 install:  ## install this software
-	install -m 755 $(PROGNAME) $(PREFIX)$(BINDIR)/$(PROGNAME)
-	install -m 755 $(PROGNAME).$(SECTION) $(PREFIX)$(MANPATH)$(SECTION)/$(PROGNAME).$(SECTION)
+	install -D -m 755 $(PROGNAME) $(DESTDIR)$(PREFIX)$(BINDIR)/$(PROGNAME)
+	install -D -m 755 $(PROGNAME).$(SECTION) $(DESTDIR)$(PREFIX)$(MANPATH)$(SECTION)/$(PROGNAME).$(SECTION)
 
 uninstall: ## remove this software
 	rm -iv $(PREFIX)$(BINDIR)/$(PROGNAME)
@@ -39,3 +40,12 @@ uninstall: ## remove this software
 lint: CHECKS ?= all #? which check to enable (e.g. warning, style, etc...)
 lint:  ## static analysis with cppcheck
 	cppcheck --std=c99 --enable=$(CHECKS) .
+
+deb-export-archive:
+	git archive --format=tar  HEAD | xz > ../mh_$(VERSION).orig.tar.xz
+
+deb-version:
+	debchange -v $(shell echo $(VERSION) | sed "s/^v//") bump git version
+
+deb-build:
+	dpkg-buildpackage -us -uc
