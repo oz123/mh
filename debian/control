@@ -1,8 +1,8 @@
 Source: mh
 Section: Development
 Priority: optional
-Maintainer: unknown <oznt@vmd39014.contaboserver.net>
-Build-Depends: debhelper (>= 10) libpcre2-dev
+Maintainer: Oz Tiram <oz.tiram@gmail.com>
+Build-Depends: debhelper (>= 10), libpcre2-dev
 Standards-Version: 4.1.2
 Homepage: https://github.com/oz123/mh
 #Vcs-Git: https://anonscm.debian.org/git/collab-maint/mh.git
@@ -11,5 +11,16 @@ Homepage: https://github.com/oz123/mh
 Package: mh
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
+Description: The missing Makefile help generator
  <insert long description, indented with spaces>
+ Building modern software requires a lot of tools. Often, one can't or does not
+ want to memorize or type all these commands over and over again (docker, npm,
+ terraform, ansible, scss, etc). What ever your stack looks like, ``Makefile``
+ and the ``make`` command help you avoid unnecessary typing and save time.
+ All too often, it is easy to forget which targets are available in the
+ `Makefile`s of different projects.
+ Also, as time goes on, these Makefiles can become gigantic, and getting a
+ quick overview by reading the `Makefile` becomes hard.
+ The purpose of this program is to fix this situation by turning a `Makefile`
+ to self-documenting, by using a simple syntax for documenting targets, variables
+ and global make options.

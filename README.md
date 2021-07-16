@@ -17,12 +17,12 @@ All too often, I forget which targets are available in the `Makefile`s of
 different project. Also, as time goes on, these Makefiles can become gigantic,
 and getting a quick overview by reading the `Makefile` becomes impossible.
 The purpose of this program is to fix this situation by turning a `Makefile`
-to self-documenting, by using a simple syntax for documenting target, variable
-and global make option.
+to self-documenting, by using a simple syntax for documenting targets, variables
+and global make options.
 This is much better than maintaining a help target manually for larger projects.
 This program parses all the lines and checks for target, local variables
 and global variables. If they are suffixed with `##` or `#?` the string that
-follows is interpreted as the help for that variable or target.
+follows is interpreted as the help for that variables or targets.
 
 The targets can be used with parameters like this:
 
