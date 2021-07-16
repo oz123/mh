@@ -1,0 +1,15 @@
+Source: mh
+Section: Development
+Priority: optional
+Maintainer: unknown <oznt@vmd39014.contaboserver.net>
+Build-Depends: debhelper (>= 10) libpcre2-dev
+Standards-Version: 4.1.2
+Homepage: https://github.com/oz123/mh
+#Vcs-Git: https://anonscm.debian.org/git/collab-maint/mh.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/mh.git
+
+Package: mh
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
