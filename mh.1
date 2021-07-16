@@ -1,0 +1,94 @@
+.TH mh "1" "July 2021" "User Commands" "User Commands"
+.SH NAME
+.PP
+\fBmh\fP \- make help
+.SH SYNOPSIS
+.PP
+\fBmh\fP [ \-\-help | \-\-version | \-\-file <Makefile> ] [target]
+.SH DESCRIPTION
+.PP
+\fBmh\fP reads a \fIMakefile\fP (make(1)) and generates a help text
+.br
+for all targetsin the file.
+.br
+The \fIMakefile\fP has to be commented in an easy to learn syntax to
+create this help.
+.br
+See EXAMPLES bellow.
+.PP
+The options are as follows:
+.PP
+ \fB\-v, \-\-version\fP shows the program version and exists.
+.PP
+ \fB\-h, \-\-help\fP    shows a short help and exits.
+.PP
+ \fB\-f, \-\-file\fP    set the \fIMakefile\fP to read (per default it is a file called \fIMakefile\fP in the current directory).
+.SH EXAMPLES
+.PP
+The \fIMakefile\fP can be documented by adding comments prefixed with ## or #?.
+.PP
+A comment prefixed with ## will be considered a help string for a target.
+Consider the following example:
+.PP
+  launch\-app:  ## launches the application in development mode
+  	./run app
+.PP
+Running \fBmh \-f thisexample\fP will output:
+.PP
+   \fITargets:\fP
+.PP
+   launch\-app:          launches the application in development mode
+.PP
+The app target can have some local variable that determines the behaviour of the
+program:
+.PP
+  launch\-app: PORT ?= 9000
+  launch\-app:  ## launches the application in development mode
+  	./run app \-\-port $(PORT)
+.PP
+This allows to call the target overriding this port:
+.PP
+  $ make launch\-app PORT=8080
+.PP
+This can documented with:
+.PP
+  launch\-app: PORT ?= 9000 #? port used to listen to
+  launch\-app:  ## launches the application in development mode
+  	./run app \-\-port $(PORT)
+.PP
+This help can be shown with:
+.PP
+   $ mh \-f thisexample launch\-app
+   \fIHelp for target:\fP launch\-app
+.PP
+   launches the application in development mode
+   Options:
+          PORT: port used to list to (default: 9000)
+.PP
+   Usage: make launch\-app PORT=ping
+.PP
+One can also define global variables which apply to all targets:
+.PP
+  OPTS ?= ""#? General options passed to targets  
+.PP
+  launch\-app: PORT ?= 9000 #? port used to listen to
+  launch\-app:  ## launches the application in development mode
+  	./run app \-\-port $(PORT) $(OPTS)
+.PP
+   $ mh \-f thisexample
+.PP
+   \fITargets:\fP
+.PP
+   launch\-app:         launches the application in development mode
+.PP
+   Global options you can override:
+.PP
+   OPTS:		General options passed to targets
+.PP
+This can now be used in the following way:
+.PP
+   $ make launch\-target OPTS=\-\-reload
+   ./run app \-\-port 9000 \-\-reload
+.SH AUTHORS
+.PP
+Oz Tiram <oz.tiram@gmail.com>
