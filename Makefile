@@ -32,6 +32,6 @@ install:  ## install this software
 uninstall: ## remove this software
 	rm -iv $(PREFIX)$(BINDIR)/$(PROGNAME)
 
-link: CHECKS ?= all #? which check to enable (e.g. warning, style, etc...)
+lint: CHECKS ?= all #? which check to enable (e.g. warning, style, etc...)
 lint:  ## static analysis with cppcheck
-	cppcheck --std=c99 --enable=$(checks) .
+	cppcheck --std=c99 --enable=$(CHECKS) .
