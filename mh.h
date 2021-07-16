@@ -68,8 +68,10 @@ target_t *copy_target(target_t*);
 
 /**
  * Show the help for a single target and exit
+ *
+ * return 1 if target not found
  */
-void show_target_help(char *, Queue *);
+int show_target_help(char *, Queue *);
 /**
  * Show all targets and globals help and exit
  */

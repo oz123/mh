@@ -43,11 +43,13 @@ static int	find_cmd(const char *);
 int
 main(int argc, char *argv[])
 {
+    int es = 0;
+    size_t len = 0;
+    size_t line_length;
+
     char *lookup = NULL;
     char *filename = NULL;
     char *line = NULL;
-    size_t len = 0;
-    size_t line_length;
 
     FILE *fp;
 
@@ -95,7 +97,7 @@ main(int argc, char *argv[])
     fclose(fp);
 
     if (lookup) {
-        show_target_help(lookup, targets);
+        es = show_target_help(lookup, targets);
     } else {
         show_all_help(targets, globals);
     }
@@ -107,5 +109,5 @@ main(int argc, char *argv[])
     queue_free(targets);
     queue_free(globals);
     free(line);
-    exit(EXIT_SUCCESS);
+    exit(es);
 }
