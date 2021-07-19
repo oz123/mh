@@ -96,9 +96,9 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
     pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(regex, NULL);
 
     int rc = pcre2_match(
-        regex,                   /* the compiled pattern */
+        regex,                /* the compiled pattern */
         (PCRE2_SPTR8)line,    /* the subject string */
-        strlen(line),          /* the length of the subject */
+        strlen(line),         /* the length of the subject */
         0,                    /* start at offset 0 in the subject */
         0,                    /* default options */
         match_data,           /* block for storing the result */

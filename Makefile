@@ -49,3 +49,8 @@ deb-version:
 
 deb-build:
 	dpkg-buildpackage -us -uc
+
+
+test::
+	gcc $(CFLAGS) $(shell pkg-config -libs cmocka) mh.c queue.c test.c -o test
+	./test
