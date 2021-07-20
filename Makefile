@@ -52,5 +52,6 @@ deb-build:
 
 
 test::
+	rm ./test
 	gcc $(CFLAGS) $(shell pkg-config -libs cmocka) mh.c queue.c test.c -o test
-	./test
+	CMOCKA_MESSAGE_OUTPUT=SUBUNIT ./test
