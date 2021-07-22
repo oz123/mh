@@ -14,7 +14,7 @@ endif
 
 DEBUG = -g -fsanitize=address
 CFLAGS ?= -Wall
-LIBS ?= -lpcre2-8
+LIBS ?= $(shell pkg-config --libs libpcre2-8)
 OPTS ?= -D COLOROUTPUT
 PREFIX ?= /usr/local
 MANPATH = $(PREFIX)/share/man/man
