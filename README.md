@@ -83,8 +83,8 @@ build: ## build the project
     gcc -Wall -D AUTHOR=$(AUTHOR) $(OBJECTS) project.c -o $(PROGNAME)
 ```
 
-For example, the `Makefile.test` in this repository will print the following,
-when no target is given or when `make -f Makefile.test help` is called:
+For example, the `Makefile.example` in this repository will print the following,
+when no target is given or when `make -f Makefile.example help` is called:
 ```
 $ make -f Makefile.test
 Targets:
@@ -115,7 +115,7 @@ Use `make help target=foo` to learn more about foo.
 You can also learn more about a specific target by doing:
 
 ```
-$ make -f Makefile.test target=foo
+$ make -f Makefile.example target=foo
 No such traget: foo
 make: *** [Makefile.test:9: help] Error 1
 $ make -f Makefile.test target=ffff-color
