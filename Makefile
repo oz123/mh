@@ -30,7 +30,7 @@ clean:
 	rm -fv $(PROGNAME)
 
 mh:  ## compile this software
-	$(CC) -o $(PROGNAME) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(LIBS) $(LDFLAGS) $(OPTS)
+	$(CC) $(CPPFLAGS) -o $(PROGNAME) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(LIBS) $(LDFLAGS) $(OPTS)
 
 install:  ## install this software
 	install -D -m 755 $(PROGNAME) $(DESTDIR)$(PREFIX)$(BINDIR)/$(PROGNAME)
@@ -56,5 +56,5 @@ deb-build:
 
 test::
 	rm -f ./test
-	$(CC) -o test $(CFLAGS) $(shell $(PKG_CONFIG) -libs cmocka) $(LIBS) $(LDFLAGS) mh.c queue.c test.c -o test
+	$(CC) $(CPPFLAGS) -o test $(CFLAGS) $(shell $(PKG_CONFIG) -libs cmocka) $(LIBS) $(LDFLAGS) mh.c queue.c test.c -o test
 	CMOCKA_MESSAGE_OUTPUT=SUBUNIT ./test
