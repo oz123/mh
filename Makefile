@@ -12,9 +12,10 @@ ifndef target
 	@echo "Use \`make help target=foo\` to learn more about foo."
 endif
 
+PKG_CONFIG ?= pkg-config
 DEBUG = -g -fsanitize=address
 CFLAGS ?= -Wall
-LIBS ?= $(shell pkg-config --libs libpcre2-8)
+LIBS ?= $(shell $(PKG_CONFIG) --libs libpcre2-8)
 OPTS ?= -D COLOROUTPUT
 PREFIX ?= /usr/local
 MANPATH = $(PREFIX)/share/man/man
@@ -55,5 +56,5 @@ deb-build:
 
 test::
 	rm -f ./test
-	$(CC) -o test $(CFLAGS) $(shell pkg-config -libs cmocka) $(LIBS) $(LDFLAGS) mh.c queue.c test.c -o test
+	$(CC) -o test $(CFLAGS) $(shell $(PKG_CONFIG) -libs cmocka) $(LIBS) $(LDFLAGS) mh.c queue.c test.c -o test
 	CMOCKA_MESSAGE_OUTPUT=SUBUNIT ./test
