@@ -14,6 +14,7 @@ endif
 
 DEBUG = -g -fsanitize=address
 CFLAGS = -Wall -lpcre2-8 #$(DEBUG)
+LDFLAGS ?=
 OPTS = -D COLOROUTPUT
 PREFIX = /usr/local
 MANPATH = /man/man
@@ -27,7 +28,7 @@ clean:
 	rm -fv $(PROGNAME)
 
 mh:  ## compile this software
-	gcc -o $(PROGNAME) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(OPTS)
+	gcc -o $(PROGNAME) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(LDFLAGS) $(OPTS)
 
 install:  ## install this software
 	install -D -m 755 $(PROGNAME) $(DESTDIR)$(PREFIX)$(BINDIR)/$(PROGNAME)
