@@ -13,26 +13,27 @@ ifndef target
 endif
 
 DEBUG = -g -fsanitize=address
-CFLAGS = -Wall -lpcre2-8 #$(DEBUG)
-LDFLAGS ?=
-OPTS = -D COLOROUTPUT
-PREFIX = /usr/local
-MANPATH = /man/man
+CFLAGS ?= -Wall
+LIBS ?= -lpcre2-8
+OPTS ?= -D COLOROUTPUT
+PREFIX ?= /usr/local
+MANPATH = $(PREFIX)/share/man/man
 SECTION = 1
 BINDIR = /bin
 PROGNAME = mh
 VERSION = $(shell git describe --always)
+CC ?= gcc
 OBJECTS = queue.c mh.c main.c
 
 clean:
 	rm -fv $(PROGNAME)
 
 mh:  ## compile this software
-	gcc -o $(PROGNAME) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(LDFLAGS) $(OPTS)
+	$(CC) -o $(PROGNAME) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(LIBS) $(LDFLAGS) $(OPTS)
 
 install:  ## install this software
 	install -D -m 755 $(PROGNAME) $(DESTDIR)$(PREFIX)$(BINDIR)/$(PROGNAME)
-	install -D -m 755 $(PROGNAME).$(SECTION) $(DESTDIR)$(PREFIX)$(MANPATH)$(SECTION)/$(PROGNAME).$(SECTION)
+	install -D -m 755 $(PROGNAME).$(SECTION) $(DESTDIR)$(MANPATH)$(SECTION)/$(PROGNAME).$(SECTION)
 
 uninstall: ## remove this software
 	rm -iv $(PREFIX)$(BINDIR)/$(PROGNAME)
@@ -54,5 +55,5 @@ deb-build:
 
 test::
 	rm -f ./test
-	gcc $(CFLAGS) $(shell pkg-config -libs cmocka) mh.c queue.c test.c -o test
+	$(CC) -o test $(CFLAGS) $(shell pkg-config -libs cmocka) $(LIBS) $(LDFLAGS) mh.c queue.c test.c -o test
 	CMOCKA_MESSAGE_OUTPUT=SUBUNIT ./test
