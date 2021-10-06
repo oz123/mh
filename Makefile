@@ -36,8 +36,8 @@ install:  ## install this software
 	install -D -m 755 $(PROGNAME).$(SECTION) $(DESTDIR)$(MANPATH)$(SECTION)/$(PROGNAME).$(SECTION)
 
 uninstall: ## remove this software
-	rm -iv $(PREFIX)$(BINDIR)/$(PROGNAME)
-	rm -iv $(PREFIX)$(MANPATH)$(SECTION)/$(PROGNAME).$(SECTION)
+	-rm -v $(PREFIX)$(BINDIR)/$(PROGNAME)
+	-rm -v $(MANPATH)/$(SECTION)/$(PROGNAME).$(SECTION)
 
 lint: CHECKS ?= all #? which check to enable (e.g. warning, style, etc...)
 lint:  ## static analysis with cppcheck
