@@ -6,10 +6,9 @@ SHELL := /bin/bash
 
 .PHONY: help
 help:
-	@mh -f $(MAKEFILE_LIST) $(target)
+	@mh -f $(MAKEFILE_LIST) $(target) || echo "Please install mh from github/oz123/mh"
 ifndef target
-	@echo ""
-	@echo "Use \`make help target=foo\` to learn more about foo."
+	@(which mh > /dev/null 2>&1 && echo -e "\nUse \`make help target=foo\` to learn more about foo.")
 endif
 
 PKG_CONFIG ?= pkg-config
