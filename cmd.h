@@ -76,7 +76,7 @@ void usage(struct command *cmd) {
 	}
 }
 
-void version() {
+void version(void) {
     fprintf(stderr, PROGNAME " " VERSION"\n");
     fprintf(stderr, "Copyright (C) 2021 " AUTHOR".\n");
     fprintf(stderr, "This software is distributed under terms of:\n");
