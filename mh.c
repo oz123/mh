@@ -178,8 +178,9 @@ void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
 }
 
 void show_all_help(Queue *targets, Queue *globals) {
-    //cppcheck-suppress unreadVariable
-    target_t *target = new_target();
+
+    target_t *target;
+    variable_t *gv;
 
     printf(CYN UNDR "Targets:\n" RESET);
     while (!queue_is_empty(targets)) {
@@ -188,7 +189,6 @@ void show_all_help(Queue *targets, Queue *globals) {
     }
 
     if (!queue_is_empty(globals)) {
-        variable_t *gv = new_variable();
         printf(CYN UNDR "\nGlobal options you can override:\n\n" RESET);
         while (!queue_is_empty(globals)) {
             gv = queue_pop_head(globals);
@@ -198,9 +198,8 @@ void show_all_help(Queue *targets, Queue *globals) {
             } else {
                 printf("\n");
             }
+            free_variable(gv);
         }
-        free_variable(gv);
-
     }
 }
 
