@@ -62,7 +62,7 @@ typedef struct target {
   Queue *locals;
 } target_t;
 
-target_t *new_target();
+target_t *new_target(void);
 void free_target(target_t*);
 target_t *copy_target(target_t*);
 
@@ -85,12 +85,12 @@ typedef struct variable {
   char *help;
 } variable_t;
 
-variable_t *new_variable();
-void free_variable();
+variable_t *new_variable(void);
+void free_variable(void);
 /**
  * Show the program usage and exit
  */
-void usage();
+void usage(void);
 
 /**
  * Check line for regex
