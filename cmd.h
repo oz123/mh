@@ -110,7 +110,7 @@ parse_args(int argc, char *argv[], char **filename, char **lookup) {
        }
     }
     if (!*filename) {
-        *filename = "Makefile";
+        *filename = (char*)"Makefile";
         if (argc > 1) {
             *lookup = argv[argc - 1];
         }
