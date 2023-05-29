@@ -14,7 +14,7 @@ endif
 PKG_CONFIG ?= pkg-config
 DEBUG = -g -fsanitize=address
 CFLAGS ?= -Wall
-LIBS ?= $(shell $(PKG_CONFIG) --libs libpcre2-8)
+LIBS ?= $(shell $(PKG_CONFIG) --libs libpcre2-8) -lbsd
 OPTS ?= -D COLOROUTPUT
 PREFIX ?= /usr/local
 MANPATH = $(PREFIX)/share/man/man

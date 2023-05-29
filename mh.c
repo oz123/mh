@@ -28,6 +28,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define  _POSIX_C_SOURCE 200809L
 #define PCRE2_CODE_UNIT_WIDTH 8
 #include <assert.h>
+#include <bsd/string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,8 +53,8 @@ target_t *copy_target(target_t *target) {
     copy->name = (char*)calloc(strlen(target->name), sizeof(char));
     copy->help = (char*)calloc(strlen(target->help), sizeof(char));
 
-    strcpy(copy->name, target->name);
-    strcpy(copy->help, target->help);
+    strlcpy(copy->name, target->name, sizeof(copy->name));
+    strlcpy(copy->help, target->help, sizeof(copy->help));
     while (!queue_is_empty(target->locals)) {
         queue_push_tail(copy->locals, queue_pop_head(target->locals));
     }
