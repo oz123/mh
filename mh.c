@@ -118,10 +118,10 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
      if (copyname_rc == 0) {
          if (target != NULL) {
             target->name = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
-            memcpy(target->name, substr_buf, substr_buf_len);
+            memcpy(target->name, substr_buf, substr_buf_len); // NOLINT
          } else if (variable != NULL) {
             variable->name = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
-            memcpy(variable->name, substr_buf, substr_buf_len);
+            memcpy(variable->name, substr_buf, substr_buf_len); // NOLINT
          }
      }
 
