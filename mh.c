@@ -119,7 +119,7 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
             target->name = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
             memcpy(target->name, substr_buf, substr_buf_len);
          } else if (variable != NULL) {
-            variable->name = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
+            variable->name = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
             memcpy(variable->name, substr_buf, substr_buf_len);
          }
      }
@@ -127,10 +127,10 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
      int copyhelp_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"help", &substr_buf, &substr_buf_len);
      if (copyhelp_rc == 0) {
          if (target != NULL) {
-             target->help = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
+             target->help = calloc(substr_buf_len, sizeof(char));
              memcpy(target->help, substr_buf, substr_buf_len);
          } else if (variable != NULL) {
-            variable->help = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
+            variable->help = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
             memcpy(variable->help, substr_buf, substr_buf_len);
          }
      }
@@ -138,7 +138,7 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
      if (variable != NULL) {
          int copydefault_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"default", &substr_buf, &substr_buf_len);
          if (copydefault_rc == 0) {
-             variable->default_value = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
+             variable->default_value = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
              memcpy(variable->default_value, substr_buf, substr_buf_len);
          }
      }
