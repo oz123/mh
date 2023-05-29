@@ -45,7 +45,6 @@ main(int argc, char *argv[])
 {
     int es = 0;
     size_t len = 0;
-    size_t line_length;
 
     char *lookup = NULL;
     char *filename = NULL;
@@ -72,7 +71,7 @@ main(int argc, char *argv[])
     pcre2_code *regex_target, *regex_local, *regex_global;
     init_pcre_regex(&regex_target, &regex_global, &regex_local);
 
-    while ((line_length = getline(&line, &len, fp)) != -1) {
+    while (getline(&line, &len, fp) != -1) {
         variable_t *variable = new_variable();
         if (!check_line_for_global_var(line, variable, regex_global)) {
             queue_push_tail(globals, variable);
