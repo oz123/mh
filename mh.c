@@ -48,8 +48,10 @@ target_t *new_target(void) {
 
 target_t *copy_target(target_t *target) {
     target_t *copy = new_target();
-    copy->name = (char*)malloc(strlen(target->name) * sizeof(PCRE2_UCHAR));
-    copy->help = (char*)malloc(strlen(target->help) * sizeof(PCRE2_UCHAR));
+
+    copy->name = (char*)calloc(strlen(target->name), sizeof(char));
+    copy->help = (char*)calloc(strlen(target->help), sizeof(char));
+
     strcpy(copy->name, target->name);
     strcpy(copy->help, target->help);
     while (!queue_is_empty(target->locals)) {
@@ -114,8 +116,8 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
      int copyname_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"name", &substr_buf, &substr_buf_len);
      if (copyname_rc == 0) {
          if (target != NULL) {
-            target->name = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
-             memcpy(target->name, substr_buf, substr_buf_len);
+            target->name = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
+            memcpy(target->name, substr_buf, substr_buf_len);
          } else if (variable != NULL) {
             variable->name = malloc(substr_buf_len * sizeof(PCRE2_UCHAR));
             memcpy(variable->name, substr_buf, substr_buf_len);
