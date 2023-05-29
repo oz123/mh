@@ -86,11 +86,8 @@ typedef struct variable {
 } variable_t;
 
 variable_t *new_variable(void);
-void free_variable(void);
-/**
- * Show the program usage and exit
- */
-void usage(void);
+void free_variable(variable_t *variable);
+
 
 /**
  * Check line for regex
