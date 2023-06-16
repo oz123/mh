@@ -1,3 +1,10 @@
+mh (1.0.3-1) unstable; urgency=medium
+
+  * Fix memory leak
+  * Build improvements
+
+ -- Oz Tiram <oz.tiram@gmail.com>  Wed, 17 Jun 2023 00:46:08 +0200
+
 mh (1.0.1-1) unstable; urgency=medium
 
   * Fix building
