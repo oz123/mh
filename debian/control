@@ -12,7 +12,6 @@ Package: mh
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: The missing Makefile help generator
- <insert long description, indented with spaces>
  Building modern software requires a lot of tools. Often, one can't or does not
  want to memorize or type all these commands over and over again (docker, npm,
  terraform, ansible, scss, etc). What ever your stack looks like, ``Makefile``
