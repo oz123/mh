@@ -31,6 +31,9 @@ clean:
 mh:  ## compile this software
 	$(CC) $(CPPFLAGS) -o $(PROGNAME) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(LIBS) $(LDFLAGS) $(OPTS)
 
+mh-static:  ## compile this software for a static build
+	$(CC) $(CPPFLAGS) -static -o $(PROGNAME)-$(shell uname -o | cut -d"/" -f2 | tr '[:upper:]' '[:lower:]')-$(shell uname -m) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(LIBS) $(LDFLAGS) $(OPTS)
+
 install:  ## install this software
 	install -D -m 755 $(PROGNAME) $(DESTDIR)$(PREFIX)$(BINDIR)/$(PROGNAME)
 	install -D -m 755 $(PROGNAME).$(SECTION) $(DESTDIR)$(MANPATH)$(SECTION)/$(PROGNAME).$(SECTION)
