@@ -53,8 +53,8 @@ target_t *copy_target(target_t *target) {
     copy->name = (char*)calloc(strlen(target->name), sizeof(char));
     copy->help = (char*)calloc(strlen(target->help), sizeof(char));
 
-    strlcpy(copy->name, target->name, sizeof(copy->name));
-    strlcpy(copy->help, target->help, sizeof(copy->help));
+    strlcpy(copy->name, target->name, strlen(target->name) + 1);
+    strlcpy(copy->help, target->help, strlen(target->name) + 1);
     while (!queue_is_empty(target->locals)) {
         queue_push_tail(copy->locals, queue_pop_head(target->locals));
     }
@@ -179,18 +179,18 @@ void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
 
 void show_all_help(Queue *targets, Queue *globals) {
 
-    target_t *target;
-    variable_t *gv;
-
     printf(CYN UNDR "Targets:\n" RESET);
     while (!queue_is_empty(targets)) {
+        target_t *target = new_target();
         target = queue_pop_head(targets);
         printf("\n" CYN "%s" RESET "\t\t%s\n", target->name, target->help);
+        free_target(target);
     }
 
     if (!queue_is_empty(globals)) {
         printf(CYN UNDR "\nGlobal options you can override:\n\n" RESET);
         while (!queue_is_empty(globals)) {
+            variable_t *gv = new_variable();
             gv = queue_pop_head(globals);
             printf("%s:\t%s", gv->name, gv->help);
             if (strlen(gv->default_value) != 0) {
