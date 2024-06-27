@@ -1,0 +1,48 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build debug",
+			"type": "shell",
+			"command": "make",
+			"args": ["clean", "mh-debug"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+			{
+				"label": "build mh",
+				"type": "shell",
+				"command": "make",
+				"args": ["clean", "mh"],
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"presentation": {
+					"reveal": "always"
+				},
+				"problemMatcher": []
+			},
+			{
+				"label": "clean",
+				"type": "shell",
+				"command": "make",
+				"args": ["clean"],
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"presentation": {
+					"reveal": "always"
+				},
+				"problemMatcher": []
+			}
+	
+	]
+}
