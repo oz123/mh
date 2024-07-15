@@ -40,6 +40,10 @@ mh-debug:
 mh-static:  ## compile this software for a static build
 	$(CC) $(CPPFLAGS) -static -o $(PROGNAME)-$(STATIC_STUFFIX) -D VERSION=\"$(VERSION)\" $(OBJECTS) $(CFLAGS) $(LIBS) $(LDFLAGS) $(OPTS)
 
+install-static:  ## install this software
+	install -D -m 755 $(PROGNAME)-$(STATIC_STUFFIX) $(DESTDIR)$(PREFIX)$(BINDIR)/$(PROGNAME)
+	install -D -m 755 $(PROGNAME).$(SECTION) $(DESTDIR)$(MANPATH)$(SECTION)/$(PROGNAME).$(SECTION)
+
 install:  ## install this software
 	install -D -m 755 $(PROGNAME) $(DESTDIR)$(PREFIX)$(BINDIR)/$(PROGNAME)
 	install -D -m 755 $(PROGNAME).$(SECTION) $(DESTDIR)$(MANPATH)$(SECTION)/$(PROGNAME).$(SECTION)
