@@ -95,10 +95,11 @@ main(int argc, char *argv[])
 
     fclose(fp);
 
-    if (lookup) {
-        es = show_target_help(lookup, targets);
-    } else {
+    if (lookup == NULL || strcmp(lookup, ".env") == 0) {
+	printf("Lookup is NULL or .env\n");
         show_all_help(targets, globals);
+    } else if (strcmp(lookup, ".env") != 0) {
+            es = show_target_help(lookup, targets);
     }
 
     pcre2_code_free(regex_target);
