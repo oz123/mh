@@ -47,10 +47,10 @@ static struct command {
 	const char	*descr;
 	const int	cmdtype;
 } cmd[] = {
-	{ "--version", "-v", "Show the program version", CMD_VERSION},
+    { "--version", "-v", "Show the program version", CMD_VERSION},
     { "--help", "-h", "Show this help", CMD_HELP},
     { "--file", "-f", "Makefile to read (default: Makefile if -f isn't given)", CMD_FILE},
-	{ NULL, NULL, NULL, -1}
+    { NULL, NULL, NULL, -1}
 };
 
 /* find command index */
