@@ -116,7 +116,7 @@ parse_args(int argc, char *argv[], char **filename, char **lookup) {
         }
     } else {
         if (argc > 3) {
-            *lookup = argv[3];
+            *lookup = argv[argc - 1];
         }
     }
 }
