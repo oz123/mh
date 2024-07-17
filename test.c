@@ -42,6 +42,18 @@ static void check_line_is_global(void **state){
 }
 
 
+static void check_line_is_global_with_digit(void **state){
+    variable_t *g = new_variable();
+    pcre2_code *regex_target = compile_regex(REGEX_GLOBAL_VAR);
+    int rv = check_line_for_global_var("BAR_WITH_11_DIGIT ?= baz #? sets global bar to baz",
+                                   g,
+                                   regex_target);
+	int cmp = strcmp(g->name, "BAR_WITH_11_DIGIT");
+	assert_false(cmp); // check that string comparision succeeded
+    assert_false(rv); // check_line_for_global returns 0 on match
+}
+
+
 static void check_line_is_not_global(void **state){
     variable_t *g = new_variable();
     pcre2_code *regex_target = compile_regex(REGEX_GLOBAL_VAR);
@@ -58,6 +70,7 @@ int main(void) {
         cmocka_unit_test(check_line_is_target),
         cmocka_unit_test(check_line_is_variable),
         cmocka_unit_test(check_line_is_global),
+        cmocka_unit_test(check_line_is_global_with_digit),
         cmocka_unit_test(check_line_is_not_global),
         };
     return cmocka_run_group_tests(tests, NULL, NULL);
