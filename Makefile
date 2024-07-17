@@ -65,7 +65,6 @@ deb-version:
 deb-build:
 	dpkg-buildpackage -us -uc
 
-
 test::
 	rm -f ./test
 	$(CC) $(CPPFLAGS) -o test $(CFLAGS) $(shell $(PKG_CONFIG) -libs cmocka) $(LIBS) $(LDFLAGS) mh.c queue.c test.c -o test
