@@ -60,10 +60,13 @@ lint:  ## static analysis with cppcheck
 deb-export-archive:
 	git archive --format=tar  HEAD | xz > ../mh_$(shell echo $(VERSION) | sed "s/^v//; s/-[0-9a-g]*$$//").orig.tar.xz
 
+deb-install-deps:
+	apt install -y libpcre2-dev libbsd-dev libcmocka-dev debhelper debchange devscripts
+
 deb-version:
 	debchange -b -v $(shell echo $(VERSION) | sed "s/^v//") bump git version
 
-deb-build:
+deb-build: deb-export-archive
 	dpkg-buildpackage -us -uc
 
 test::
