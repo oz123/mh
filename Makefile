@@ -11,6 +11,7 @@ ifndef target
 	@(which mh > /dev/null 2>&1 && echo -e "\nUse \`make help target=foo\` to learn more about foo.")
 endif
 
+GLOBAL_K8S = foo #? has
 PKG_CONFIG ?= pkg-config
 DEBUG = -g #-fsanitize=address
 CFLAGS ?= -Wall
@@ -69,3 +70,7 @@ test::
 	rm -f ./test
 	$(CC) $(CPPFLAGS) -o test $(CFLAGS) $(shell $(PKG_CONFIG) -libs cmocka) $(LIBS) $(LDFLAGS) mh.c queue.c test.c -o test
 	CMOCKA_MESSAGE_OUTPUT=SUBUNIT ./test
+
+checksum.txt: mh-$(STATIC_STUFFIX)
+	sha512sum mh-linux-x86_64 > checksum.txt
+
