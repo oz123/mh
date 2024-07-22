@@ -246,7 +246,7 @@ QueueValue queue_peek_tail(Queue *queue)
 	}
 }
 
-int queue_is_empty(Queue *queue)
+int queue_is_empty(const Queue *queue)
 {
 	return queue->head == NULL;
 }

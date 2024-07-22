@@ -243,7 +243,9 @@ int show_target_help(char *targetname, Queue *targets) {
                     if (_usage) {
                         usage = _usage;
                     }
-                    char *r = words[rand() % NUMBER_OF_STRINGS];
+		    // show an example of usage for a target e.g.
+		    // make targetname VAR1=foo VAR2=bar
+                    const char *r = words[rand() % NUMBER_OF_STRINGS];
                     char *fragment = (char *)malloc(strlen(lv->name) + 1 + strlen(r) + 1);
                     sprintf(fragment, " %s=%s", lv->name, r);
                     strcat(usage, fragment);

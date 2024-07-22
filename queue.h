@@ -148,7 +148,7 @@ QueueValue queue_peek_tail(Queue *queue);
  *                   is empty.
  */
 
-int queue_is_empty(Queue *queue);
+int queue_is_empty(const Queue *queue);
 
 
 #endif /* #ifndef ALGORITHM_QUEUE_H */
