@@ -54,8 +54,10 @@ uninstall: ## remove this software
 	-rm -v $(MANPATH)/$(SECTION)/$(PROGNAME).$(SECTION)
 
 lint: CHECKS ?= all #? which check to enable (e.g. warning, style, etc...)
+lint: OPTS ?= #? for example: --force
+lint: FILES ?= . #? which files to check
 lint:  ## static analysis with cppcheck
-	cppcheck --std=c99 --enable=$(CHECKS) --inline-suppr -I /usr/include/ -I /usr/include/linux/ -I /usr/lib/clang/17/include/ .
+	cppcheck --std=c99 $(OPTS) --enable=$(CHECKS) --inline-suppr -I /usr/include/ -I /usr/include/linux/ -I /usr/lib/clang/17/include/ $(FILES)
 
 deb-export-archive:
 	git archive --format=tar  HEAD | xz > ../mh_$(shell echo $(VERSION) | sed "s/^v//; s/-[0-9a-g]*$$//").orig.tar.xz
