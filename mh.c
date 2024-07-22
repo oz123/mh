@@ -185,8 +185,7 @@ void show_all_help(Queue *targets, Queue *globals, Queue *envvars) {
 
     printf(CYN UNDR "Targets:\n" RESET);
     while (!queue_is_empty(targets)) {
-        target_t *target = new_target();
-        target = queue_pop_head(targets);
+        target_t *target = queue_pop_head(targets);
         printf("\n" CYN "%s" RESET "\t\t%s\n", target->name, target->help);
         free_target(target);
     }
@@ -194,8 +193,7 @@ void show_all_help(Queue *targets, Queue *globals, Queue *envvars) {
     if (!queue_is_empty(globals)) {
         printf(CYN UNDR "\nGlobal vars in Makefile:\n\n" RESET);
         while (!queue_is_empty(globals)) {
-            variable_t *gv = new_variable();
-            gv = queue_pop_head(globals);
+            variable_t *gv = queue_pop_head(globals);
             printf("%s:\t%s", gv->name, gv->help);
             if (strlen(gv->default_value) != 0) {
                 printf(" (default: %s)\n", gv->default_value);
@@ -209,8 +207,7 @@ void show_all_help(Queue *targets, Queue *globals, Queue *envvars) {
     if (!queue_is_empty(envvars)) {
         printf(CYN UNDR "\nGlobal vars in .env:\n\n" RESET);
         while (!queue_is_empty(envvars)) {
-            variable_t *ev = new_variable();
-            ev = queue_pop_head(envvars);
+            variable_t *ev = queue_pop_head(envvars);
             printf("%s:\t%s", ev->name, ev->help);
             if (strlen(ev->default_value) != 0) {
                 printf(" (default: %s)\n", ev->default_value);
