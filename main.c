@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mh.h"
 
 
-static int	find_cmd(const char *);
+static int      find_cmd(const char *);
 
 int
 main(int argc, char *argv[])
@@ -51,6 +51,7 @@ main(int argc, char *argv[])
     char *line = NULL;
 
     FILE *fp;
+    FILE *envfile;
 
     parse_args(argc, argv, &filename, &lookup);
 
@@ -65,6 +66,7 @@ main(int argc, char *argv[])
 
     Queue* targets = queue_new();
     Queue* globals = queue_new();
+    Queue* envvars = queue_new();
 
     target_t *target = new_target();
 
@@ -95,11 +97,25 @@ main(int argc, char *argv[])
 
     fclose(fp);
 
+    // load variables from .env file
+    envfile = fopen(".env", "r");
+
+    if (envfile) {
+        while (getline(&line, &len, envfile) != -1) {
+            variable_t *variable = new_variable();
+            if (!check_line_for_env_var(line, variable, regex_global)) {
+                 queue_push_tail(envvars, variable);
+                 continue;
+            }
+        }
+        fclose(envfile);
+    }
+
     if (lookup == NULL || strcmp(lookup, ".env") == 0) {
-	//printf("Lookup is NULL or .env\n");
-        show_all_help(targets, globals);
+        //printf("Lookup is NULL or .env\n");
+        show_all_help(targets, globals, envvars);
     } else if (strcmp(lookup, ".env") != 0) {
-            es = show_target_help(lookup, targets);
+        es = show_target_help(lookup, targets);
     }
 
     pcre2_code_free(regex_target);
