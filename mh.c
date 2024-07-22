@@ -90,6 +90,10 @@ int check_line_for_local_var(char *line, variable_t *variable, pcre2_code *regex
     return check_line_for_regex(line, NULL, variable, regex);
 }
 
+int check_line_for_env_var(char *line, variable_t *variable, pcre2_code *regex) {
+    return check_line_for_regex(line, NULL, variable, regex);
+}
+
 int check_line_for_target(char *line, target_t *target, pcre2_code *regex) {
     return check_line_for_regex(line, target, NULL, regex);
 }
@@ -177,7 +181,7 @@ void init_pcre_regex(pcre2_code **a, pcre2_code **b, pcre2_code **c){
     *c = compile_regex(REGEX_LOCAL_VAR);
 }
 
-void show_all_help(Queue *targets, Queue *globals) {
+void show_all_help(Queue *targets, Queue *globals, Queue *envvars) {
 
     printf(CYN UNDR "Targets:\n" RESET);
     while (!queue_is_empty(targets)) {
@@ -188,7 +192,7 @@ void show_all_help(Queue *targets, Queue *globals) {
     }
 
     if (!queue_is_empty(globals)) {
-        printf(CYN UNDR "\nGlobal options you can override:\n\n" RESET);
+        printf(CYN UNDR "\nGlobal vars in Makefile:\n\n" RESET);
         while (!queue_is_empty(globals)) {
             variable_t *gv = new_variable();
             gv = queue_pop_head(globals);
@@ -201,6 +205,21 @@ void show_all_help(Queue *targets, Queue *globals) {
             free_variable(gv);
         }
     }
+
+    if (!queue_is_empty(envvars)) {
+        printf(CYN UNDR "\nGlobal vars in .env:\n\n" RESET);
+        while (!queue_is_empty(envvars)) {
+            variable_t *ev = new_variable();
+            ev = queue_pop_head(envvars);
+            printf("%s:\t%s", ev->name, ev->help);
+            if (strlen(ev->default_value) != 0) {
+                printf(" (default: %s)\n", ev->default_value);
+            } else {
+                printf("\n");
+            }
+            free_variable(ev);
+        }
+	}
 }
 
 int show_target_help(char *targetname, Queue *targets) {

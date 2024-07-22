@@ -75,7 +75,7 @@ int show_target_help(char *, Queue *);
 /**
  * Show all targets and globals help and exit
  */
-void show_all_help(Queue *, Queue *);
+void show_all_help(Queue *, Queue *, Queue *);
 /**
  * variable global or local
  */
@@ -110,6 +110,18 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
  * @return          0 for a match, 1 for non match
  */
 int check_line_for_global_var(char *line, variable_t *global, pcre2_code *regex);
+
+/**
+ * Check that a line in file is in the form of <traget-name: ## help for the target>
+ * <target-name>: <var-name> ?= <default value> #? <help string>
+ * <var-name> ?= <default value>#? <help string>
+ *
+ * @param line      a text line
+ * @target          target_t a target pointer
+ * @variable        variable_t variable pointer
+ * @return          0 for a match, 1 for non match
+ */
+int check_line_for_env_var(char *line, variable_t *env, pcre2_code *regex);
 
 /**
  * Check that a line in file is in the form of <traget-name: ## help for the target>
