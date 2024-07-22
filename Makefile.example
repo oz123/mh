@@ -17,6 +17,12 @@ IMG ?= $(shell basename $(CURDIR))#? image name
 OPTS ?=#? add extra OPTS to misc commands
 ORG ?= oz123#? organization to push
 
+ifneq (,$(wildcard ./.env))
+include .env
+	export
+endif
+
+
 bdbbb/color: HOST ?= localhost #? what host is running NGinx
 bbbbb/color: COLOR ?= green #? which color should be the backround
 bbbbb/color: ## test that the HOST shows background COLOR
