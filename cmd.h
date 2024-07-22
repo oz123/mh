@@ -68,7 +68,7 @@ find_cmd(const char *arg)
 }
 
 
-void usage(struct command *cmd) {
+void usage(const struct command *cmd) {
     fprintf(stderr, PROGNAME " [ --help | --version | --file <Makefile> ] [target]\n");
     fprintf(stderr, "\nOptions:\n");
 	for (int i = 0; cmd[i].name != NULL; i++) {
