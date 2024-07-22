@@ -98,6 +98,7 @@ int check_line_for_target(char *line, target_t *target, pcre2_code *regex) {
     return check_line_for_regex(line, target, NULL, regex);
 }
 
+// cppcheck-suppress constParameterPointer
 int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcre2_code *regex) {
 
     pcre2_match_data *match_data = pcre2_match_data_create_from_pattern(regex, NULL);
@@ -219,7 +220,7 @@ void show_all_help(Queue *targets, Queue *globals, Queue *envvars) {
 	}
 }
 
-int show_target_help(char *targetname, Queue *targets) {
+int show_target_help(char *targetname, Queue *targets) { // cppcheck-suppress constParameterPointer
 
     while (!queue_is_empty(targets)) {
         target_t *target = queue_pop_head(targets);
@@ -229,14 +230,13 @@ int show_target_help(char *targetname, Queue *targets) {
             printf("%s\n\n", target->help);
 
             if (!queue_is_empty(target->locals)) {
-                //cppcheck-suppress shadowFunction
                 char *usage = (char *)malloc(5 + strlen(target->name) + 13);
                 char *_usage;
                 sprintf(usage, "Usage: make %s", target->name);
                 printf("Options:\n");
 
                 while (!queue_is_empty(target->locals)) {
-                    variable_t *lv = queue_pop_head(target->locals);
+                    const variable_t *lv = queue_pop_head(target->locals);
                     printf("\t%s: %s (default: %s)\n\n", lv->name, lv->help, lv->default_value);
                     _usage = (char *)realloc(usage, strlen(usage) + strlen(lv->name) + 1);
 
