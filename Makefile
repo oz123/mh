@@ -55,7 +55,7 @@ uninstall: ## remove this software
 
 lint: CHECKS ?= all #? which check to enable (e.g. warning, style, etc...)
 lint:  ## static analysis with cppcheck
-	cppcheck --std=c99 --enable=$(CHECKS) --inline-suppr .
+	cppcheck --std=c99 --enable=$(CHECKS) --inline-suppr -I /usr/include/ -I /usr/include/linux/ -I /usr/lib/clang/17/include/ .
 
 deb-export-archive:
 	git archive --format=tar  HEAD | xz > ../mh_$(shell echo $(VERSION) | sed "s/^v//; s/-[0-9a-g]*$$//").orig.tar.xz
