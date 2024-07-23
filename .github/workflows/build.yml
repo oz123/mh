@@ -32,4 +32,4 @@ jobs:
     - name:
       run: brew update
     - name:
-      run: brew install pcre2 libbsd cmocka
+      run: brew install pcre2 cmocka
