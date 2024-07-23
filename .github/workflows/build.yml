@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: mh CI
 
 on:
   push:
@@ -30,4 +30,6 @@ jobs:
           exit 1
         fi
     - name:
-      run: make brew-install-deps
+      run: brew update
+    - name:
+      run: brew install pcre2 libbsd cmocka
