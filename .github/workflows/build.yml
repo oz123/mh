@@ -37,4 +37,4 @@ jobs:
       run: |
          brew --prefix pcre2
          brew --prefix cmocka
-         make mh OPTS="-I$(brew --prefix pcre2)
+         make mh OPTS="-I$(brew --prefix pcre2)"
