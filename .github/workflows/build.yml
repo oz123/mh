@@ -8,17 +8,20 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: install deps
       run: sudo make deb-install-deps
     - name: make mh
       run: make mh
-    - name: make test
+    - name: build static binary
+    - name: make mh-static OPTS=-lpthread
       run: make test
+    - name: build deb package
+      run: |
+        make debdeb-export-archive
+        make debbuild
   build-osx:
     runs-on: macos-latest
     steps:
