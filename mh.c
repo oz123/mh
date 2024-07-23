@@ -55,11 +55,13 @@ target_t *new_target(void) {
 target_t *copy_target(target_t *target) {
     target_t *copy = new_target();
 
-    copy->name = (char*)calloc(strlen(target->name), sizeof(char));
-    copy->help = (char*)calloc(strlen(target->help), sizeof(char));
+    copy->name = (char*)calloc(strlen(target->name), sizeof(char)+1);
+    copy->help = (char*)calloc(strlen(target->help), sizeof(char)+1);
 
-    strlcpy(copy->name, target->name, strlen(target->name) + 1);
-    strlcpy(copy->help, target->help, strlen(target->help) + 1);
+    //strlcpy(copy->name, target->name, strlen(target->name) + 1);
+    //strlcpy(copy->help, target->help, strlen(target->help) + 1);
+    snprintf(copy->name, sizeof(target->name), "%s", target->name);
+    snprintf(copy->help, sizeof(target->help), "%s", target->help);
     while (!queue_is_empty(target->locals)) {
         queue_push_tail(copy->locals, queue_pop_head(target->locals));
     }
