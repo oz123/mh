@@ -31,3 +31,5 @@ jobs:
         fi
     - name: Update Homebrew
       run: brew update
+    - name:
+      run: make brew-install-deps

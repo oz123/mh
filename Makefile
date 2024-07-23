@@ -65,6 +65,9 @@ deb-export-archive:
 deb-install-deps:
 	apt install -y libpcre2-dev libbsd-dev libcmocka-dev debhelper devscripts
 
+brew-install-deps:
+	brew install libpcre2 libbsd libcmockas
+
 deb-version:
 	debchange -b -v $(shell echo $(VERSION) | sed "s/^v//") bump git version
 
