@@ -33,3 +33,5 @@ jobs:
       run: brew update
     - name:
       run: brew install pcre2 cmocka
+    - name: build
+      run: make mh
