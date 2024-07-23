@@ -1,3 +1,13 @@
+mh (1.3.0-1) unstable; urgency=medium
+
+  * bump git version
+  * bump git version
+  * bump git version
+  * bump git version
+  * bump git version
+
+ -- oznt <oznt@xubuntu-vm>  Tue, 23 Jul 2024 20:42:00 +0200
+
 mh (1.0.3-1) unstable; urgency=medium
 
   * Fix memory leak
