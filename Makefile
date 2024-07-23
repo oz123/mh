@@ -67,7 +67,7 @@ deb-install-deps:
 
 brew-install-deps:
 	brew update
-	brew install pcre2 libbsd cmocka
+	brew install pcre2 cmocka
 
 deb-version:
 	debchange -b -v $(shell echo $(VERSION) | sed "s/^v//") bump git version
