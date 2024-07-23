@@ -1,0 +1,108 @@
+name: release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+permissions:  # Set permissions for the GITHUB_TOKEN
+  contents: write  # Grant write permission to contents
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: install deps
+      run: sudo make deb-install-deps
+    - name: build static binary
+      run: make mh-static OPTS=-lpthread
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mh-static-linux-x86_64
+        path: mh-linux-x86_64
+  build-deb:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        path: 'mh'
+    - name: build deb package
+      run: |
+        cd mh
+        git fetch --tags --force
+        git fetch --unshallow
+        docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace debian:buster bash -c "apt-get update && apt install -y build-essential git pkg-config && git config --global --add safe.directory /workspace/mh && make -C mh deb-install-deps deb-export-archive deb-version deb-build"
+        ls ..
+    - name: Extract Git Tag
+      run: |
+        # Retrieve the current tag
+        cd mh
+        VERSION=$(git describe --tags --abbrev=0)
+        # Strip the 'v' prefix if needed
+        VERSION=${VERSION#v}
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        ls
+    - name: upload artifcat
+      uses: actions/upload-artifact@v4
+      with:
+        path: mh_${{ env.VERSION }}-1_amd64.deb
+        name: mh_${{ env.VERSION }}-1_amd64.deb
+  build-osx-arm:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Check for Homebrew
+      run: |
+        if test ! $(which brew); then
+          echo "Homebrew not found"
+          exit 1
+        fi
+    - name: update brew
+      run: brew update
+    - name: install libs
+      run: brew install pcre2 cmocka
+    - name: Install dependencies
+      run: |
+        brew install llvm
+        echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> $GITHUB_ENV
+        echo 'export LDFLAGS="-L/usr/local/opt/llvm/lib"' >> $GITHUB_ENV
+        echo 'export CPPFLAGS="-I/usr/local/opt/llvm/include"' >> $GITHUB_ENV
+    - name: build
+      run: |
+         make mh CC=clang LIBS="$(pkg-config --cflags --libs libpcre2-8) -lpthread" PROGNAME=mh-$(uname -o | tr '[:upper:]' '[:lower:]')-$(uname -m)
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mh-darwin-arm64
+        path: mh-darwin-arm64
+  create-release:
+    runs-on: ubuntu-latest
+    needs: [build, build-deb, build-osx-arm]
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: "Release ${{ github.ref }}"
+        body: "Release notes or description"
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./artifacts
+    - name: list
+      run: ls .
+    - name: list
+      run: ls -ll artifacts/
+    - name: upload mac osx arm build artifact to release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          artifacts/mh-darwin-arm64/*
+          artifacts/mh-static-linux-x86_64/*
+          artifacts/mh_*_amd64.deb/*
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

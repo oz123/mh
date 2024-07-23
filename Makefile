@@ -21,8 +21,8 @@ PREFIX ?= /usr/local
 MANPATH = $(PREFIX)/share/man/man
 SECTION = 1
 BINDIR = /bin
-PROGNAME = mh
-VERSION = $(shell git describe --always)
+PROGNAME ?= mh
+VERSION = $(shell git describe --always --tags)
 CC ?= gcc
 OBJECTS = queue.c mh.c main.c
 STATIC_STUFFIX=$(shell uname -o | cut -d"/" -f2 | tr '[:upper:]' '[:lower:]')-$(shell uname -m)
@@ -70,7 +70,8 @@ brew-install-deps:
 	brew install pcre2 cmocka
 
 deb-version:
-	debchange -b -v $(shell echo $(VERSION) | sed "s/^v//") bump git version
+	debchange -b -v $(shell echo $(VERSION) | sed "s/^v//")-1 "bump git version"
+	head debian/changelog
 
 deb-build: deb-export-archive
 	dpkg-buildpackage -us -uc
@@ -82,4 +83,3 @@ test::
 
 checksum.txt: mh-$(STATIC_STUFFIX)
 	sha512sum mh-linux-x86_64 > checksum.txt
-
