@@ -29,9 +29,9 @@ jobs:
           echo "Homebrew not found"
           exit 1
         fi
-    - name:
+    - name: update brew
       run: brew update
-    - name:
+    - name: install libs
       run: brew install pcre2 cmocka
     - name: build
       run: |
