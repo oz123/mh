@@ -66,6 +66,7 @@ deb-install-deps:
 	apt install -y libpcre2-dev libbsd-dev libcmocka-dev debhelper devscripts
 
 brew-install-deps:
+	brew update && \ 
 	brew install pcre2 libbsd cmocka
 
 deb-version:
