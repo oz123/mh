@@ -47,4 +47,5 @@ jobs:
       run: |
         #clang -o mh -D VERSION=\"aa30377\" queue.c mh.c main.c -Wall $(pkg-config --cflags --libs libpcre2-8)
          make mh CC=clang LIBS="$(pkg-config --cflags --libs libpcre2-8) -lpthread"
+         make mh-static CC=clang LIBS="$(pkg-config --cflags --libs libpcre2-8) -lpthread"
 
