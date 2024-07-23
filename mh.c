@@ -209,15 +209,10 @@ void show_all_help(Queue *targets, Queue *globals, Queue *envvars) {
         printf(CYN UNDR "\nGlobal vars in .env:\n\n" RESET);
         while (!queue_is_empty(envvars)) {
             variable_t *ev = queue_pop_head(envvars);
-            printf("%s:\t%s", ev->name, ev->help);
-            if (strlen(ev->default_value) != 0) {
-                printf(" (default: %s)\n", ev->default_value);
-            } else {
-                printf("\n");
-            }
+            printf("%s:\t%s\n", ev->name, ev->help);
             free_variable(ev);
-        }
 	}
+    }
 }
 
 int show_target_help(char *targetname, Queue *targets) { // cppcheck-suppress constParameterPointer
