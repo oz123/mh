@@ -19,6 +19,11 @@ jobs:
       run: make mh-static OPTS=-lpthread
     - name: test
       run: make test
+  build-deb:
+    runs-on: ubuntu-latest
+    steps:
+    - name: install deps
+      run: sudo make deb-install-deps
     - name: build deb package
       run: |
         git fetch --tags
