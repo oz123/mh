@@ -32,10 +32,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string.h> // Use standard string.h on macOS
 #else
 #include <bsd/string.h> // Use bsd/string.h on Linux/BSD systems
+#include <string.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <pcre2.h>
 #include "mh.h"
 
