@@ -28,7 +28,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define  _POSIX_C_SOURCE 200809L
 #define PCRE2_CODE_UNIT_WIDTH 8
 #include <assert.h>
-#include <bsd/string.h>
+#ifdef __APPLE__
+#include <string.h> // Use standard string.h on macOS
+#else
+#include <bsd/string.h> // Use bsd/string.h on Linux/BSD systems
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
