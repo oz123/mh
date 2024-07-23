@@ -16,7 +16,8 @@ jobs:
     - name: make mh
       run: make mh
     - name: build static binary
-    - name: make mh-static OPTS=-lpthread
+      run: make mh-static OPTS=-lpthread
+    - name: test
       run: make test
     - name: build deb package
       run: |
