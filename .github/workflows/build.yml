@@ -31,6 +31,7 @@ jobs:
         make deb-export-archive
         make deb-version
         make deb-build
+
   build-osx:
     runs-on: macos-latest
     steps:
@@ -53,4 +54,4 @@ jobs:
         echo 'export CPPFLAGS="-I/usr/local/opt/llvm/include"' >> $GITHUB_ENV
     - name: build
       run: |
-         make mh CC=clang LIBS="$(pkg-config --cflags --libs libpcre2-8) -lpthread" PROGNAME=mh-$(uname -o)
+         make mh CC=clang LIBS="$(pkg-config --cflags --libs libpcre2-8) -lpthread" PROGNAME=mh-$(uname -o | tr '[:upper:]' '[:lower:]')-$(uname -m)
