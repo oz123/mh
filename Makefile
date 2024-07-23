@@ -63,7 +63,7 @@ deb-export-archive:
 	git archive --format=tar  HEAD | xz > ../mh_$(shell echo $(VERSION) | sed "s/^v//; s/-[0-9a-g]*$$//").orig.tar.xz
 
 deb-install-deps:
-	apt install -y libpcre2-dev libbsd-dev libcmocka-dev debhelper debchange devscripts
+	apt install -y libpcre2-dev libbsd-dev libcmocka-dev debhelper devscripts
 
 deb-version:
 	debchange -b -v $(shell echo $(VERSION) | sed "s/^v//") bump git version
