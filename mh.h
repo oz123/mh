@@ -28,7 +28,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define PCRE2_CODE_UNIT_WIDTH 8
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef __APPLE__
 #include <string.h>
+#else
+#include <bsd/string.h> // Use bsd/string.h on Linux/BSD systems
+#include <string.h>
+#endif
 #include <pcre2.h>
 #include "queue.h"
 
