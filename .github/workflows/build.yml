@@ -22,6 +22,7 @@ jobs:
     - name: build deb package
       run: |
         make deb-export-archive
+        make deb-version
         make deb-build
   build-osx:
     runs-on: macos-latest
