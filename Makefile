@@ -73,7 +73,7 @@ deb-build: deb-export-archive
 
 test::
 	rm -f ./test
-	$(CC) $(CPPFLAGS) -o test $(CFLAGS) $(shell $(PKG_CONFIG) --libs cmocka) $(LIBS) $(LDFLAGS) mh.c queue.c test.c -o test
+	$(CC) $(CPPFLAGS) -o test mh.c queue.c test.c $(CFLAGS) $(shell $(PKG_CONFIG) --libs cmocka) $(LIBS) $(LDFLAGS) 
 	CMOCKA_MESSAGE_OUTPUT=SUBUNIT ./test
 
 checksum.txt: mh-$(STATIC_STUFFIX)
