@@ -15,7 +15,7 @@ GLOBAL_K8S = foo #? has
 PKG_CONFIG ?= pkg-config
 DEBUG = -g #-fsanitize=address
 CFLAGS ?= -Wall
-LIBS ?= $(shell $(PKG_CONFIG) --libs libpcre2-8) -lbsd
+LIBS ?= $(shell $(PKG_CONFIG) --libs libpcre2-8)
 OPTS ?= -D COLOROUTPUT
 PREFIX ?= /usr/local
 MANPATH = $(PREFIX)/share/man/man
@@ -63,7 +63,7 @@ deb-export-archive:
 	git archive --format=tar  HEAD | xz > ../mh_$(shell echo $(VERSION) | sed "s/^v//; s/-[0-9a-g]*$$//").orig.tar.xz
 
 deb-install-deps:
-	apt install -y libpcre2-dev libbsd-dev libcmocka-dev debhelper devscripts
+	apt install -y libpcre2-dev libcmocka-dev debhelper devscripts
 
 brew-install-deps:
 	brew update
