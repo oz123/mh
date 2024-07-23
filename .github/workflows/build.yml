@@ -21,6 +21,7 @@ jobs:
       run: make test
     - name: build deb package
       run: |
+        git fetch --tags
         make deb-export-archive
         make deb-version
         make deb-build
