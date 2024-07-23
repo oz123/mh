@@ -21,7 +21,7 @@ jobs:
       run: make test
     - name: build deb package
       run: |
-        make debdeb-export-archive
+        make deb-export-archive
         make debbuild
   build-osx:
     runs-on: macos-latest
