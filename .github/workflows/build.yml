@@ -19,3 +19,15 @@ jobs:
       run: make mh
     - name: make test
       run: make test
+  build-osx:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Check for Homebrew
+      run: |
+        if test ! $(which brew); then
+          echo "Homebrew not found"
+          exit 1
+        fi
+    - name: Update Homebrew
+      run: brew update
