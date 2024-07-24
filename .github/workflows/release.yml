@@ -74,9 +74,38 @@ jobs:
       with:
         name: mh-darwin-arm64
         path: mh-darwin-arm64
+  build-osx-amd64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for Homebrew
+        run: /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+      - name: update brew
+        run: brew update
+      - name: Install Python and Handle Symlink Conflicts
+        run: |
+          arch -x86_64 /usr/local/bin/brew install python@3.12 || true
+          brew link --overwrite python@3.12
+      - name: install libs
+        run: arch -x86_64 /usr/local/bin/brew install pcre2 cmocka llvm pkg-config
+      - name: Install dependencies
+        run: |
+          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> $GITHUB_ENV
+          echo 'export LDFLAGS="-L/usr/local/opt/llvm/lib"' >> $GITHUB_ENV
+          echo 'export CPPFLAGS="-I/usr/local/opt/llvm/include"' >> $GITHUB_ENV
+      - name: build
+        run: |
+          export LDFLAGS="-L/usr/local/opt/llvm/lib"
+          export CPPFLAGS="-I/usr/local/opt/llvm/include"
+          make mh CC=clang LIBS="$(/usr/local/bin/pkg-config --cflags --libs libpcre2-8) -lpthread" CPPFLAGS="-target x86_64-apple-macos11" PROGNAME=mh-darwin-x86_64-apple-macos11
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mh-darwin-x86_64-apple-macos11
+          path: mh-darwin-x86_64-apple-macos11
   create-release:
     runs-on: ubuntu-latest
-    needs: [build, build-deb, build-osx-arm]
+    needs: [build, build-deb, build-osx-arm, build-osx-amd64]
     steps:
     - name: Create Release
       id: create_release
@@ -94,14 +123,12 @@ jobs:
       with:
         path: ./artifacts
     - name: list
-      run: ls .
-    - name: list
       run: ls -ll artifacts/
     - name: upload mac osx arm build artifact to release
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          artifacts/mh-darwin-arm64/*
+          artifacts/mh-darwin-*/*
           artifacts/mh-static-linux-x86_64/*
           artifacts/mh_*_amd64.deb/*
     env:
