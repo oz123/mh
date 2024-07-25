@@ -1,0 +1,2 @@
+FOO=BAR #? control the foo
+MY_SECRET_API_KEY=123456 #? the secret api key
