@@ -89,6 +89,10 @@ main(int argc, char *argv[])
         }
         if (!check_line_for_target(line, target, regex_target)) {
             target_t *copy = copy_target(target);
+	     //printf("DEBUG: target->name is %s\n", target->name);
+	     //printf("DEBUG: target->help is %s\n", target->help);
+	     //printf("DEBUG: copy->name is %s\n", copy->name);
+	     //printf("DEBUG: copy->help is %s\n", copy->help);
             queue_push_tail(targets, copy);
         }
         /* target or variable were not pushed to queue, hence they can be released */

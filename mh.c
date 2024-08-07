@@ -50,13 +50,13 @@ target_t *new_target(void) {
 target_t *copy_target(target_t *target) {
     target_t *copy = new_target();
 
-    copy->name = (char*)calloc(strlen(target->name), sizeof(char)+1);
-    copy->help = (char*)calloc(strlen(target->help), sizeof(char)+1);
+    copy->name = (char*)calloc(strlen(target->name)+1, sizeof(char));
+    copy->help = (char*)calloc(strlen(target->help)+1, sizeof(char));
 
     //strlcpy(copy->name, target->name, strlen(target->name) + 1);
     //strlcpy(copy->help, target->help, strlen(target->help) + 1);
-    snprintf(copy->name, sizeof(target->name), "%s", target->name);
-    snprintf(copy->help, sizeof(target->help), "%s", target->help);
+    snprintf(copy->name, strlen(target->name)+1, "%s", target->name);
+    snprintf(copy->help, strlen(target->help)+1, "%s", target->help);
     while (!queue_is_empty(target->locals)) {
         queue_push_tail(copy->locals, queue_pop_head(target->locals));
     }
@@ -124,22 +124,26 @@ int check_line_for_regex(char *line, target_t *target, variable_t *variable, pcr
      int copyname_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"name", &substr_buf, &substr_buf_len);
      if (copyname_rc == 0) {
          if (target != NULL) {
-            target->name = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
-            memcpy(target->name, substr_buf, substr_buf_len); // NOLINT
+             target->name = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
+             memcpy(target->name, substr_buf, substr_buf_len); // NOLINT
+	     //printf("DEBUG: target->name is %s\n", target->name);
          } else if (variable != NULL) {
-            variable->name = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
-            memcpy(variable->name, substr_buf, substr_buf_len); // NOLINT
+             variable->name = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
+             memcpy(variable->name, substr_buf, substr_buf_len); // NOLINT
          }
      }
 
      int copyhelp_rc = pcre2_substring_get_byname(match_data, (PCRE2_SPTR)"help", &substr_buf, &substr_buf_len);
      if (copyhelp_rc == 0) {
+	 //printf("DEBUG: help is %s\n", substr_buf);
          if (target != NULL) {
              target->help = calloc(substr_buf_len, sizeof(char));
              memcpy(target->help, substr_buf, substr_buf_len);
-         } else if (variable != NULL) {
+	     //printf("DEBUG: target->help is %s\n", target->help);
+	 } else if (variable != NULL) {
             variable->help = calloc(substr_buf_len, sizeof(PCRE2_UCHAR));
             memcpy(variable->help, substr_buf, substr_buf_len);
+	    //printf("DEBUG: variable->help is %s\n", variable->help);
          }
      }
      
