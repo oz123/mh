@@ -6,7 +6,7 @@ SHELL := /bin/bash
 
 .PHONY: help
 help:
-	@mh -f $(MAKEFILE_LIST) $(target) || echo "Please install mh from github/oz123/mh"
+	@mh -f $(MAKEFILE_LIST) $(target) || echo "Please install mh from https://github.com/oz123/mh/releases"
 ifndef target
 	@(which mh > /dev/null 2>&1 && echo -e "\nUse \`make help target=foo\` to learn more about foo.")
 endif
