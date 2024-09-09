@@ -37,8 +37,14 @@ color-0:  ## test target with number
 h2o: ## water should match too
 	echo water
 
+r2d2: ## robots
+	echo beep boop beep
+
 color-1:  ## test target with number
 	echo target with number
+
+12456-: ## test target with numbers
+	echo target with numbers
 
 ffff-color: HOST ?= localhost #? what host is running NGinx
 ffff-color: COLOR ?= green #? which color should be the backround

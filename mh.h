@@ -32,8 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <pcre2.h>
 #include "queue.h"
 
-# define REGEX_HELP_TARGET "^(?P<name>[a-zA-Z_/-]+):.*?## (?P<help>.*)$"
-# define REGEX_LOCAL_VAR "^(?P<target>[a-zA-Z_\\/\\d-]+): ?(?P<name>[A-Z_]+) ?\\?= (?P<default>.*) #\\? ?(?P<help>.*)$"
+# define REGEX_HELP_TARGET "^(?P<name>[\\da-zA-Z_/-]+):.*?## (?P<help>.*)$"
+# define REGEX_LOCAL_VAR "^(?P<target>[\\da-zA-Z_/-]+): ?(?P<name>[A-Z_]+) ?\\?= (?P<default>.*) #\\? ?(?P<help>.*)$"
 # define REGEX_GLOBAL_VAR "^(?P<name>[A-Z_\\d]+).*?= ?(?P<default>.*)#\\?(?P<help>.*)$"
 
 

@@ -53,8 +53,6 @@ target_t *copy_target(target_t *target) {
     copy->name = (char*)calloc(strlen(target->name)+1, sizeof(char));
     copy->help = (char*)calloc(strlen(target->help)+1, sizeof(char));
 
-    //strlcpy(copy->name, target->name, strlen(target->name) + 1);
-    //strlcpy(copy->help, target->help, strlen(target->help) + 1);
     snprintf(copy->name, strlen(target->name)+1, "%s", target->name);
     snprintf(copy->help, strlen(target->help)+1, "%s", target->help);
     while (!queue_is_empty(target->locals)) {
