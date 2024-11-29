@@ -68,12 +68,12 @@ find_cmd(const char *arg)
 }
 
 
-void usage(const struct command *cmd) {
+void help(const struct command *cmd) {
     fprintf(stderr, PROGNAME " [ --help | --version | --file <Makefile> ] [target]\n");
     fprintf(stderr, "\nOptions:\n");
-	for (int i = 0; cmd[i].name != NULL; i++) {
-        fprintf(stderr, "  %s, %s\t\t\t%s\n", cmd[i].shortcut, cmd[i].name, cmd[i].descr);
-	}
+    for (int i = 0; cmd[i].name != NULL; i++) {
+         fprintf(stderr, "  %s, %s\t\t\t%s\n", cmd[i].shortcut, cmd[i].name, cmd[i].descr);
+    }
 }
 
 void version(void) {
@@ -95,14 +95,14 @@ parse_args(int argc, char *argv[], char **filename, char **lookup) {
         int ch = find_cmd(argv[1]);
         switch (ch) {
             case CMD_HELP:
-                usage(cmd);
+                help(cmd);
                 exit(1);
             case CMD_VERSION:
                 version();
                 exit(0);
             case CMD_FILE:
                 if (argc < 3) {
-                    usage(cmd);
+                    help(cmd);
                     exit(1);
                 }
                 *filename = argv[2];
@@ -120,3 +120,5 @@ parse_args(int argc, char *argv[], char **filename, char **lookup) {
         }
     }
 }
+
+/* vim: set ts=4 sw=4 et: */

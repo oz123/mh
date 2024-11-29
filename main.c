@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mh.h"
 
 
-static int      find_cmd(const char *);
+static int find_cmd(const char *);
 
 int
 main(int argc, char *argv[])
